@@ -1,0 +1,50 @@
+{
+  "name": "currently-playing-display",
+  "version": "0.0.1",
+  "description": "currently-playing-display",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.com:Inclushe/currently-playing-display.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test:client:build": "parcel build client/tests/App.test.js --out-dir client/.temp",
+    "test": "npm run test:client:build && jest server/tests client/.temp",
+    "test:server": "jest server/tests",
+    "test:server:watch": "jest server/tests --watch",
+    "test:client": "parcel build client/tests/App.test.js --out-dir client/.temp && jest client/.temp"
+  },
+  "author": "Inclushe",
+  "license": "ISC",
+  "alias": {
+    "vue": "./node_modules/vue/dist/vue.js",
+    "vuex": "./node_modules/vuex/dist/vuex.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "jest": "^24.8.0",
+    "node-fetch": "^2.6.0",
+    "puppeteer": "^1.18.1",
+    "supertest": "^4.0.2"
+  },
+  "devDependencies": {
+    "parcel": "^1.12.3",
+    "pug": "^2.0.4",
+    "stylus": "^0.54.5",
+    "vue": "^2.6.10",
+    "vue-hot-reload-api": "^2.3.3",
+    "vue-template-compiler": "^2.6.10",
+    "@vue/component-compiler-utils": "^3.0.0",
+    "vuex": "^3.1.1",
+    "eslint": "^6.0.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-import-resolver-node": "^0.3.2",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^5.2.3"
+  }
+}
