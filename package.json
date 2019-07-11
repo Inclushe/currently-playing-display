@@ -8,11 +8,11 @@
   },
   "main": "index.js",
   "scripts": {
-    "test:client:build": "parcel build client/tests/App.test.js --out-dir client/.temp",
     "test": "npm run test:client:build && jest server/tests client/.temp",
-    "test:server": "jest server/tests",
-    "test:server:watch": "jest server/tests --watch",
-    "test:client": "parcel build client/tests/App.test.js --out-dir client/.temp && jest client/.temp"
+    "test:client": "parcel build client/tests/App.test.js --out-dir client/.temp && jest client/.temp",
+    "test:client:build": "parcel build client/tests/App.test.js --out-dir client/.temp",
+    "test:server": "jest --roots ./server/tests/",
+    "test:server:watch": "jest --roots ./server/tests/ --watchAll"
   },
   "author": "Inclushe",
   "license": "ISC",

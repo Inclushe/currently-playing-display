@@ -1,6 +1,5 @@
 const networkInterfaces = require('os').networkInterfaces()
 
-// Object.keys(networkInterfaces)
 function find (regex) {
   return Object.keys(networkInterfaces).find((value) => {
     return regex.test(value)

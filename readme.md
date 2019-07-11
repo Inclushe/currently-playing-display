@@ -14,12 +14,14 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
 
 - [ ] Server
   - [X] Serve whatever's in client (for now)
-  - [ ] Serve callback route
-    - [ ] Test success
-    - [ ] Test failure
-  - [ ] Serve reset token route
-    - [ ] Test success
-    - [ ] Test failure
+  - [X] Serve callback route
+    - [X] Test success
+    - [X] Test failure
+  - [X] Serve reset token route
+    - [X] Test success
+    - [X] Test failure
+  - [ ] Refactor
+  - [ ] Decide how it should be returned to the client
 - [ ] Client
   - [ ] Recreate design from Figma
     - [ ] Decide whether to include gradient, blurred cover art, or both
