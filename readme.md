@@ -12,7 +12,7 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
 
 ## Timeline
 
-- [ ] Server
+- [?] Server
   - [X] Serve whatever's in client (for now)
   - [X] Serve callback route
     - [X] Test success
@@ -20,11 +20,16 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
   - [X] Serve reset token route
     - [X] Test success
     - [X] Test failure
-  - [ ] Refactor
-  - [ ] Decide how it should be returned to the client
+  - [X] Refactor
+  - [X] Decide how it should be returned to the client
 - [ ] Client
+  - [X] Barebones client fetch from Spotify
   - [ ] Recreate design from Figma
     - [ ] Decide whether to include gradient, blurred cover art, or both
   - [ ] Start work in Vue
+
+## Bugs
+
+- [ ] EADDRINUSE???
 
 Remember to change all instances of "CHANGEME"

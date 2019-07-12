@@ -8,9 +8,14 @@
   },
   "main": "index.js",
   "scripts": {
+    "build": "parcel build client/src/index.pug --out-dir client/dist",
+    "serve": "npm run build && nodemon server/start.js",
     "test": "npm run test:client:build && jest server/tests client/.temp",
+    "watch": "concurrently \"parcel watch client/src/index.pug --out-dir client/dist\" \"nodemon server/start.js\"",
     "test:client": "parcel build client/tests/App.test.js --out-dir client/.temp && jest client/.temp",
     "test:client:build": "parcel build client/tests/App.test.js --out-dir client/.temp",
+    "test:client:watch": "npm run test:client:build && concurrently \"npm run client:watch\" \"jest --roots ./client/.temp --watchAll\"",
+    "test:client:parcel:watch": "parcel watch client/tests/App.test.js --out-dir client/.temp",
     "test:server": "jest --roots ./server/tests/",
     "test:server:watch": "jest --roots ./server/tests/ --watchAll"
   },
@@ -22,11 +27,12 @@
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "concurrently": "^4.1.1",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "jest": "^24.8.0",
     "node-fetch": "^2.6.0",
-    "puppeteer": "^1.18.1",
+    "nodemon": "^1.19.1",
     "supertest": "^4.0.2"
   },
   "devDependencies": {
@@ -39,7 +45,7 @@
     "@vue/component-compiler-utils": "^3.0.0",
     "vuex": "^3.1.1",
     "eslint": "^6.0.1",
-    "eslint-config-standard": "^12.0.0",
+    "eslint-config-standard": "^13.0.1",
     "eslint-import-resolver-node": "^0.3.2",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-node": "^9.1.0",

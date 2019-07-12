@@ -22,13 +22,22 @@ test('authorize route works', () => {
     })
 })
 
-test('callback route returns json error', () => expectJSONErrorOnPath('/callback'))
+test('callback route returns error', () => {
+  return supertest(server)
+    .get('/callback')
+    .then((response) => {
+      let query = queryValues(response.headers.location)
+      expect(query.error).toBe('code_not_found')
+    })
+})
 
-test('callback route valid mock gives an access token', () => {
+test('callback route valid mock gives an access token and refresh token', () => {
   return supertest(server)
     .get('/callback?code=mock_valid')
     .then((response) => {
-      expect(JSON.parse(response.text).access_token).toBe('mock_success')
+      let query = queryValues(response.headers.location)
+      expect(query.access_token).toBe('mock_success')
+      expect(query.refresh_token).toBe('mock_reset')
     })
 })
 
@@ -36,7 +45,8 @@ test('callback route invalid mock gives an error', () => {
   return supertest(server)
     .get('/callback?code=mock_invalid')
     .then((response) => {
-      expect(JSON.parse(response.text).error).toBe('mock_error')
+      let query = queryValues(response.headers.location)
+      expect(query.error).toBe('mock_error')
     })
 })
 
@@ -62,7 +72,7 @@ test('static route works for now', () => {
   return supertest(server)
     .get('/')
     .then((response) => {
-      expect(response.text).toMatch(/Hello world!/)
+      expect(response.text).toMatch(/Currently Playing Display/)
     })
 })
 
@@ -83,4 +93,13 @@ function expectJSONErrorOnPath (path) {
     .then((response) => {
       expect(JSON.parse(response.text).error).toBeDefined()
     })
+}
+
+function queryValues (url) {
+  return Array.from(url.slice(url.indexOf('?') + 1).split('&')).reduce((object, pair, index) => {
+    let key = pair.slice(0, pair.indexOf('='))
+    let value = pair.slice(pair.indexOf('=') + 1, pair.length)
+    object[key] = value
+    return object
+  }, {})
 }

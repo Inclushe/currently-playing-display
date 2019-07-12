@@ -2,11 +2,15 @@ const express = require('express')
 const fetch = require('node-fetch')
 const bodyParser = require('body-parser')
 const addresses = require('../helpers/addresses')
-const { URLSearchParams, url } = require('url')
+const spotifyMock = require('./mock/spotify')
+const { URLSearchParams } = require('url')
 require('dotenv').config()
 const server = express()
 
-server.use('/', express.static('client'))
+server.use('/', express.static('client/dist', {
+  maxAge: 1
+}))
+
 server.use(bodyParser.urlencoded({ extended: true }))
 server.use(bodyParser.json())
 
@@ -21,91 +25,48 @@ server.get('/authorize', (request, response) => {
 
 /*
   Gives access and refresh tokens to the client.
+
+  This uses the Authorization Code flow described here:
+  https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
+
   Access tokens expire one hour after requested.
   Refresh tokens do not expire.
 */
-server.get('/callback', (request, response) => {
-  if (request.query.code === undefined) {
-    response.json({
-      error: 'code_not_found'
+server.get('/callback', (request, response, next) => {
+  postToSpotifyAPI('https://accounts.spotify.com/api/token', {
+    grant_type: 'authorization_code',
+    code: request.query.code
+  })
+    .then(data => data.json())
+    .then((data) => {
+      console.log(data)
+      if (data.error !== undefined) {
+        response.redirect(`/?error=${data.error}&state=${data.state}`)
+      } else {
+        response.redirect(`/?access_token=${data.access_token}&refresh_token=${data.refresh_token}`)
+      }
     })
-  } else if (isMocked(request)) {
-    if (request.query.code === 'mock_valid') {
-      response.json({
-        'access_token': 'mock_success',
-        'token_type': 'Bearer',
-        'expires_in': 3600,
-        'refresh_token': 'mock_reset',
-        'scope': 'user-read-currently-playing'
-      })
-    } else if (request.query.code === 'mock_invalid') {
-      response.json({
-        'error': 'mock_error',
-        'error_description': 'Mocking error'
-      })
-    }
-  } else {
-    postQuery('https://accounts.spotify.com/api/token', {
-      'grant_type': 'authorization_code',
-      'code': request.query.code,
-      'redirect_uri': process.env.redirect_uri,
-      'client_id': process.env.client_id,
-      'client_secret': process.env.client_secret
+    .catch((e) => {
+      console.error(e)
+      next(e)
     })
-      .then(data => data.json())
-      .then((data) => {
-        // Error or not, we log it
-        console.log(data)
-        response.json(data)
-      })
-      .catch((e) => {
-        console.error(e)
-        response.json(e)
-      })
-  }
 })
 
 // Refreshes the access token, given refresh_token as a query
-server.get('/refresh', (request, response) => {
-  if (request.query.refresh_token === undefined) {
-    response.json({
-      error: 'token_not_found'
+server.get('/refresh', (request, response, next) => {
+  postToSpotifyAPI('https://accounts.spotify.com/api/token', {
+    grant_type: 'refresh_token',
+    refresh_token: request.query.refresh_token
+  })
+    .then(data => data.json())
+    .then((data) => {
+      response.json(data)
     })
-  } else if (isMocked(request)) {
-    if (request.query.refresh_token === 'mock_valid') {
-      response.json({
-        'access_token': 'mock_success',
-        'token_type': 'Bearer',
-        'expires_in': 3600,
-        'scope': 'user-read-currently-playing'
-      })
-    } else if (request.query.refresh_token === 'mock_invalid') {
-      response.json({
-        'error': 'mock_error',
-        'error_description': 'Mocking error'
-      })
-    }
-  } else {
-    postQuery('https://accounts.spotify.com/api/token', {
-      'grant_type': 'refresh_token',
-      'refresh_token': request.query.refresh_token,
-      'client_id': process.env.client_id,
-      'client_secret': process.env.client_secret
+    .catch((e) => {
+      console.error(e)
+      next(e)
     })
-      .then(data => data.json())
-      .then((data) => {
-        console.log(data)
-        response.json(data)
-      })
-      .catch((e) => {
-        console.error(e)
-      })
-  }
 })
-
-function isMocked (request) {
-  return ((request.query.code === 'mock_valid' || request.query.code === 'mock_invalid' || request.query.refresh_token === 'mock_valid' || request.query.refresh_token === 'mock_invalid') && process.env.NODE_ENV !== 'production')
-}
 
 /**
  * Sends a post request using URL parameters
@@ -114,19 +75,48 @@ function isMocked (request) {
  * @param {object} parameters
  * @returns promise
  */
-function postQuery (url, parameters) {
+function postToSpotifyAPI (url, parameters) {
+  if (isMocked(parameters)) return handleMockedRequest(parameters)
   const params = new URLSearchParams()
+  params.append('redirect_uri', process.env.redirect_uri)
+  params.append('client_id', process.env.client_id)
+  params.append('client_secret', process.env.client_secret)
   Object.keys(parameters).forEach((key) => {
-    let value = parameters[key]
+    const value = parameters[key]
     params.append(key, value)
   })
-  console.log(postQuery)
   return fetch(url, {
     method: 'POST',
     body: params,
     headers: {
       'Context-Type': 'application/x-www-form-urlencoded'
     }
+  })
+}
+
+function handleMockedRequest (parameters) {
+  if (parameters.code === 'mock_valid') {
+    return mockFetchReturningJSON(spotifyMock.callbackSuccess)
+  } else if (parameters.code === 'mock_invalid') {
+    return mockFetchReturningJSON(spotifyMock.callbackFailure)
+  } else if (parameters.refresh_token === 'mock_valid') {
+    return mockFetchReturningJSON(spotifyMock.refreshSuccess)
+  } else if (parameters.refresh_token === 'mock_invalid') {
+    return mockFetchReturningJSON(spotifyMock.refreshFailure)
+  }
+}
+
+function isMocked (parameters) {
+  return ((parameters.code === 'mock_valid' || parameters.code === 'mock_invalid' || parameters.refresh_token === 'mock_valid' || parameters.refresh_token === 'mock_invalid') && process.env.NODE_ENV !== 'production')
+}
+
+function mockFetchReturningJSON (object) {
+  return new Promise((resolve, reject) => {
+    resolve({
+      json () {
+        return object
+      }
+    })
   })
 }
 

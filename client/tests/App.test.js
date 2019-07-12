@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import Vue from 'vue'
 import App from '../src/public/components/App.vue'
 
