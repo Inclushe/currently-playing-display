@@ -10,14 +10,14 @@
   "scripts": {
     "build": "parcel build client/src/index.pug --out-dir client/dist",
     "serve": "npm run build && nodemon server/start.js",
-    "test": "npm run test:client:build && jest server/tests client/.temp",
+    "test": "npm run test:client:build && mocha ./server/tests/ ./client/.temp --reporter min",
     "watch": "concurrently \"parcel watch client/src/index.pug --out-dir client/dist\" \"nodemon server/start.js\"",
-    "test:client": "parcel build client/tests/App.test.js --out-dir client/.temp && jest client/.temp",
-    "test:client:build": "parcel build client/tests/App.test.js --out-dir client/.temp",
-    "test:client:watch": "npm run test:client:build && concurrently \"npm run client:watch\" \"jest --roots ./client/.temp --watchAll\"",
+    "test:client": "parcel build client/tests/App.test.js --out-dir client/.temp && mocha client/.temp --reporter min",
+    "test:client:build": "parcel build client/tests/App.test.js --out-dir client/.temp --log-level 1",
+    "test:client:watch": "npm run test:client:build && concurrently \"npm run test:client:parcel:watch\" \"mocha --watch ./client/.temp --reporter min\"",
     "test:client:parcel:watch": "parcel watch client/tests/App.test.js --out-dir client/.temp",
-    "test:server": "jest --roots ./server/tests/",
-    "test:server:watch": "jest --roots ./server/tests/ --watchAll"
+    "test:server": "mocha server/tests/ --reporter min",
+    "test:server:watch": "mocha --watch server/tests/ --reporter min"
   },
   "author": "Inclushe",
   "license": "ISC",
@@ -30,7 +30,7 @@
     "concurrently": "^4.1.1",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
-    "jest": "^24.8.0",
+    "mocha": "^6.1.4",
     "node-fetch": "^2.6.0",
     "nodemon": "^1.19.1",
     "supertest": "^4.0.2"

@@ -33,15 +33,17 @@ server.get('/authorize', (request, response) => {
   Refresh tokens do not expire.
 */
 server.get('/callback', (request, response, next) => {
+  if (request.query.code === undefined) {
+    return response.redirect(`/?error=code_not_found`)
+  }
   postToSpotifyAPI('https://accounts.spotify.com/api/token', {
     grant_type: 'authorization_code',
     code: request.query.code
   })
     .then(data => data.json())
     .then((data) => {
-      console.log(data)
       if (data.error !== undefined) {
-        response.redirect(`/?error=${data.error}&state=${data.state}`)
+        response.redirect(`/?error=${data.error}`)
       } else {
         response.redirect(`/?access_token=${data.access_token}&refresh_token=${data.refresh_token}`)
       }
@@ -54,6 +56,11 @@ server.get('/callback', (request, response, next) => {
 
 // Refreshes the access token, given refresh_token as a query
 server.get('/refresh', (request, response, next) => {
+  if (request.query.refresh_token === undefined) {
+    return response.json({
+      error: 'refresh_token_not_found'
+    })
+  }
   postToSpotifyAPI('https://accounts.spotify.com/api/token', {
     grant_type: 'refresh_token',
     refresh_token: request.query.refresh_token
@@ -120,12 +127,15 @@ function mockFetchReturningJSON (object) {
   })
 }
 
-server.runOnPort = (portNumber) => {
+server.runOnPort = (portNumber, options) => {
   return server.listen(portNumber, () => {
-    console.log(`Running in ${process.env.NODE_ENV}`)
-    console.log(`Local Address: http://${addresses.local}:${portNumber}`)
-    console.log(`Remote Address: http://${addresses.remote}:${portNumber}`)
-    console.log(`Also, make sure '${process.env.redirect_uri}' is whitelisted as a redirect URI here: https://developer.spotify.com/dashboard/`)
+    const notSilenced = (options === undefined || options.silent !== true)
+    if (notSilenced) {
+      console.log(`Running in ${process.env.NODE_ENV}`)
+      console.log(`Local Address: http://${addresses.local}:${portNumber}`)
+      console.log(`Remote Address: http://${addresses.remote}:${portNumber}`)
+      console.log(`Also, make sure '${process.env.redirect_uri}' is whitelisted as a redirect URI here: https://developer.spotify.com/dashboard/`)
+    }
   })
 }
 
