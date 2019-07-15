@@ -1,7 +1,13 @@
 <template lang="pug">
-  .vue-test
-    h1 {{ message }}
-    pre {{ JSON.stringify(spotify.current_track, null, 2) }}
+  .app
+    .display(v-if="spotify.current_track.item")
+      .display__album-cover(:style="{'background-image': `url('${spotify.current_track.item.album.images[0].url}')`}")
+      .display__info
+        h1 {{ spotify.current_track.item.name }}
+        h2 {{ spotify.current_track.item.album.name }}
+        h3 {{ spotify.current_track.item.artists.reduce((r, v) => {r.push(v.name); return r}, []).join(', ') }}
+    div(v-else)
+      <a href="/authorize">Click here to authorize.</a>
 </template>
 
 <script>
@@ -13,22 +19,34 @@ export default {
         access_token: '',
         refresh_token: '',
         current_track: {}
-      }
+      },
+      title: 'BREAK LAW',
+      album: 'Turn Off The Lights',
+      artists: 'Dog Blood, Skrillex, Boys Noize'
     }
   },
   mounted () {
     const query = getQuery()
     console.log(query)
-    console.log('why')
     fetch('https://api.spotify.com/v1/me/player/currently-playing', {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${query.access_token}`
       }
     })
-      .then(data => data.json())
+      .then(data => {
+        // errors to check for
+        // invalid token
+        // no response
+        if (data.status === 204) {
+          return {}
+        } else {
+          return data.json()
+        }
+      })
       .then(data => {
         this.spotify.current_track = data
+        console.log(data)
       })
   }
 }

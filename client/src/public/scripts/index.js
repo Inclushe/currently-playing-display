@@ -14,5 +14,3 @@ new Vue({
   el: '#app',
   render: h => h(App)
 })
-
-document.querySelector('h1#js').textContent = 'Hello world from JavaScript!'
