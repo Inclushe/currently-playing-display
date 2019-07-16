@@ -1,5 +1,6 @@
 <template lang="pug">
   .app
+    .background(v-if="spotify.current_track.item" :style="{'background-image': `url('${spotify.current_track.item.album.images[0].url}')`}")
     .display(v-if="spotify.current_track.item")
       .display__album-cover(:style="{'background-image': `url('${spotify.current_track.item.album.images[0].url}')`}")
       .display__info

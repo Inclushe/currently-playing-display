@@ -24,9 +24,25 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
   - [X] Decide how it should be returned to the client
 - [ ] Client
   - [X] Barebones client fetch from Spotify
-  - [ ] Recreate design from Figma
-    - [ ] Decide whether to include gradient, blurred cover art, or both
-  - [ ] Start work in Vue
+  - [X] Recreate design from Figma
+  - [ ] Backgrounds
+    - [X] Make album blurred background
+    - [ ] Modularize gradient maker
+      - [ ] Decide if it should be animated
+    - [ ] Make gradient background
+  - [ ] Add Interval
+  - [ ] Animate Song Transitions
+  - [ ] Hide Unneccesary Info
+    - [ ] Self Titled Album
+    - [ ] Song is from a single album_type: "single"
+    - [ ] Or song title is same as album title
+    - [ ] Add as option?
+  - [ ] Add Settings
+    - Background Style
+      - Gradient
+      - Cover Art Blurred
+      - Both
+      - None
 
 ## Bugs
 
