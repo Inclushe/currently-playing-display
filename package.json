@@ -12,7 +12,7 @@
     "serve": "npm run build && nodemon server/start.js",
     "test": "npm run test:client:build && mocha ./server/tests/ ./client/.temp --reporter min",
     "watch": "concurrently \"parcel watch client/src/index.pug --out-dir client/dist\" \"nodemon server/start.js\"",
-    "test:client": "parcel build client/tests/App.test.js --out-dir client/.temp && mocha client/.temp --reporter min",
+    "test:client": "parcel build client/tests/App.test.js --out-dir client/.temp --no-minify && mocha client/.temp --reporter min",
     "test:client:build": "parcel build client/tests/App.test.js --out-dir client/.temp --log-level 1",
     "test:client:watch": "npm run test:client:build && concurrently \"npm run test:client:parcel:watch\" \"mocha --watch ./client/.temp --reporter min\"",
     "test:client:parcel:watch": "parcel watch client/tests/App.test.js --out-dir client/.temp",

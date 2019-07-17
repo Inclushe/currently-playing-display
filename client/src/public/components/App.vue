@@ -26,6 +26,16 @@ export default {
       artists: 'Dog Blood, Skrillex, Boys Noize'
     }
   },
+  methods: {
+    /**
+     * @param {object} tokens
+     * @param {string} tokens.access_token
+     * @param {string} tokens.refresh_token
+     */
+    getCurrentlyPlayingTrack (tokens) {
+      
+    }
+  },
   mounted () {
     const query = getQuery()
     console.log(query)

@@ -10,6 +10,12 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
 - [ ] Spotify (using web API)
 - [ ] Last.fm (using musicbrainz for album covers)
 
+## Known Issues
+
+- [ ] Vue breaks when there is no album art (local files)
+- [ ] No message when nothing playing
+- [ ] Testing using postToSpotify doesn't work (find a different way to test vue templates)
+
 ## Timeline
 
 - [?] Server
@@ -27,7 +33,7 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
   - [X] Recreate design from Figma
   - [ ] Backgrounds
     - [X] Make album blurred background
-    - [ ] Modularize gradient maker
+    - [X] Modularize gradient maker
       - [ ] Decide if it should be animated
     - [ ] Make gradient background
   - [ ] Add Interval
