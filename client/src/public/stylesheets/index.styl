@@ -22,6 +22,21 @@ body
   transform: scale(1.2)
   overflow: hidden
   z-index: 0
+  &--gradient
+    filter: blur(0.5em) brightness(0.9) saturate(4)
+    animation: rotate 20s linear infinite
+  &--opaque
+    opacity: 0.5
+
+@keyframes rotate
+  0%
+    filter: blur(0.5em) brightness(0.9) saturate(4)
+    transform: rotate(0deg) scale(2.2)
+  50%
+    filter: blur(0.5em) brightness(0.7) saturate(3)
+  100%
+    filter: blur(0.5em) brightness(0.9) saturate(4)
+    transform: rotate(360deg) scale(2.2)
 
 .display
   display: grid

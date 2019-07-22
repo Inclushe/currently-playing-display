@@ -1,8 +1,11 @@
 <template lang="pug">
   .app
-    .background(v-if="currentlyPlaying" :style="{'background-image': `url('${gradientImage}')`}")
+    .background(v-if="currentlyPlaying && backgroundType === 'cover-art'" :style="{'background-image': `url('${coverArtImage}')`}")
+    .background.background--gradient(v-if="currentlyPlaying && backgroundType === 'gradient'" :style="{'background-image': `url('${gradientImage}')`}")
+    .background(v-if="currentlyPlaying && backgroundType === 'both'" :style="{'background-image': `url('${coverArtImage}')`}")
+    .background.background--gradient.background--opaque(v-if="currentlyPlaying && backgroundType === 'both'" :style="{'background-image': `url('${gradientImage}')`}")
     .display(v-if="currentlyPlaying")
-      .display__album-cover(:style="{'background-image': `url('${coverArtImage}')`}")
+      .display__album-cover(:style="{'background-image': `url('${coverArtImage}')`}" @click="toggleBackground")
       .display__info
         h1 {{ title }}
         h2 {{ album }}
@@ -29,7 +32,10 @@ export default {
       artists: 'Dog Blood, Skrillex, Boys Noize',
       coverArtImage: '',
       gradientImage: '',
-      currentlyPlaying: false
+      currentlyPlaying: false,
+      settings: {
+        backgroundTypeIndex: 0
+      }
     }
   },
   methods: {
@@ -56,24 +62,29 @@ export default {
             // errors to check for
             // invalid token
             // no response
-            console.log(data.status)
-            if (data.status === 204 || data.status === 401) {
-              return {error: 'error'}
+            const NOT_PLAYING = 204
+            const ACCESS_TOKEN_EXPIRED = 401
+            if (data.status === NOT_PLAYING || data.status === ACCESS_TOKEN_EXPIRED) {
+              return { error: 'error' }
             } else {
               return data.json()
             }
           })
           .then(data => {
-            console.log(data)
-            if (!data.error) {
-              this.spotify.current_track = data
-              this.currentlyPlaying = true
-              this.title = data.item.name
-              this.album = data.item.album.name
-              this.artists = data.item.artists.reduce((r, v) => { r.push(v.name); return r }, []).join(', ')
-              this.coverArtImage = data.item.album.images[0].url
-              this.setGradient()
+            if (!data.error && data.item !== null) {
+              const trackChanged = (this.spotify.current_track.item === undefined || this.spotify.current_track.item.id !== data.item.id)
+              // console.log(trackChanged)
+              if (trackChanged) {
+                this.spotify.current_track = data
+                this.currentlyPlaying = true
+                this.title = data.item.name
+                this.album = data.item.album.name
+                this.artists = data.item.artists.reduce((r, v) => { r.push(v.name); return r }, []).join(', ')
+                this.coverArtImage = data.item.album.images[0].url
+                this.setGradient()
+              }
             }
+            setTimeout(this.getCurrentlyPlayingTrack, 500)
           })
       }
     },
@@ -85,6 +96,26 @@ export default {
       }).then(imageURI => {
         this.gradientImage = imageURI
       })
+    },
+    toggleBackground () {
+      this.settings.backgroundTypeIndex = (this.settings.backgroundTypeIndex + 1) % 3
+    }
+  },
+  computed: {
+    backgroundType () {
+      let type
+      switch (this.settings.backgroundTypeIndex) {
+        case 0:
+          type = 'cover-art'
+          break
+        case 1:
+          type = 'gradient'
+          break
+        case 2:
+          type = 'both'
+          break
+      }
+      return type
     }
   },
   mounted () {
