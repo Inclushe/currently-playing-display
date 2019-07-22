@@ -8,7 +8,7 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
 ## Planned Support
 
 - [ ] Spotify (using web API)
-- [ ] Last.fm (using musicbrainz for album covers)
+- [ ] Last.fm (using musicbrainz for album covers as last.fm api ToS disallows image hotlinking)
 
 ## Known Issues
 
@@ -34,21 +34,23 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
   - [ ] Backgrounds
     - [X] Make album blurred background
     - [X] Modularize gradient maker
-      - [ ] Decide if it should be animated
-    - [ ] Make gradient background
+      - [X] Decide if it should be animated
+  - [?] Add Test for Spotify API request
+  - [X] Make gradient background
   - [ ] Add Interval
+  - [ ] Add Settings (rudimentary for now)
+    - Background Style
+      - Gradient
+      - Cover Art Blurred
+      - Both
+      - None
   - [ ] Animate Song Transitions
   - [ ] Hide Unneccesary Info
     - [ ] Self Titled Album
     - [ ] Song is from a single album_type: "single"
     - [ ] Or song title is same as album title
     - [ ] Add as option?
-  - [ ] Add Settings
-    - Background Style
-      - Gradient
-      - Cover Art Blurred
-      - Both
-      - None
+  - [ ] See how to work with Last.FM
 
 ## Bugs
 

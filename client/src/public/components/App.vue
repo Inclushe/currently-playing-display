@@ -1,18 +1,21 @@
 <template lang="pug">
   .app
-    .background(v-if="spotify.current_track.item" :style="{'background-image': `url('${spotify.current_track.item.album.images[0].url}')`}")
-    .display(v-if="spotify.current_track.item")
-      .display__album-cover(:style="{'background-image': `url('${spotify.current_track.item.album.images[0].url}')`}")
+    .background(v-if="currentlyPlaying" :style="{'background-image': `url('${gradientImage}')`}")
+    .display(v-if="currentlyPlaying")
+      .display__album-cover(:style="{'background-image': `url('${coverArtImage}')`}")
       .display__info
-        h1 {{ spotify.current_track.item.name }}
-        h2 {{ spotify.current_track.item.album.name }}
-        h3 {{ spotify.current_track.item.artists.reduce((r, v) => {r.push(v.name); return r}, []).join(', ') }}
+        h1 {{ title }}
+        h2 {{ album }}
+        h3 {{ artists }}
     div(v-else)
       <a href="/authorize">Click here to authorize.</a>
 </template>
 
 <script>
+import renderGradient from 'give-me-a-gradient'
+
 export default {
+  props: ['mock'],
   data () {
     return {
       message: 'Hello world from Vue!',
@@ -23,7 +26,10 @@ export default {
       },
       title: 'BREAK LAW',
       album: 'Turn Off The Lights',
-      artists: 'Dog Blood, Skrillex, Boys Noize'
+      artists: 'Dog Blood, Skrillex, Boys Noize',
+      coverArtImage: '',
+      gradientImage: '',
+      currentlyPlaying: false
     }
   },
   methods: {
@@ -33,32 +39,59 @@ export default {
      * @param {string} tokens.refresh_token
      */
     getCurrentlyPlayingTrack (tokens) {
-      
+      if (this.mock === true) {
+        this.title = 'Mock Title'
+        this.spotify.current_track = {
+          item: true
+        }
+        this.currentlyPlaying = true
+      } else {
+        fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.spotify.access_token}`
+          }
+        })
+          .then(data => {
+            // errors to check for
+            // invalid token
+            // no response
+            console.log(data.status)
+            if (data.status === 204 || data.status === 401) {
+              return {error: 'error'}
+            } else {
+              return data.json()
+            }
+          })
+          .then(data => {
+            console.log(data)
+            if (!data.error) {
+              this.spotify.current_track = data
+              this.currentlyPlaying = true
+              this.title = data.item.name
+              this.album = data.item.album.name
+              this.artists = data.item.artists.reduce((r, v) => { r.push(v.name); return r }, []).join(', ')
+              this.coverArtImage = data.item.album.images[0].url
+              this.setGradient()
+            }
+          })
+      }
+    },
+    setGradient () {
+      renderGradient({
+        imagePath: this.coverArtImage,
+        height: 100,
+        width: 100
+      }).then(imageURI => {
+        this.gradientImage = imageURI
+      })
     }
   },
   mounted () {
     const query = getQuery()
-    console.log(query)
-    fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${query.access_token}`
-      }
-    })
-      .then(data => {
-        // errors to check for
-        // invalid token
-        // no response
-        if (data.status === 204) {
-          return {}
-        } else {
-          return data.json()
-        }
-      })
-      .then(data => {
-        this.spotify.current_track = data
-        console.log(data)
-      })
+    this.spotify.access_token = query.access_token
+    this.spotify.refresh_token = query.refresh_token
+    this.getCurrentlyPlayingTrack()
   }
 }
 

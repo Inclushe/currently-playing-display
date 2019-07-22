@@ -1,25 +1,18 @@
 /* eslint-disable no-undef */
 import Vue from 'vue'
-import App from '../src/public/components/App.vue'
+import App from '../src/public/components/App'
 const assert = require('assert')
-// const postToSpotifyAPI = require('../../server/helpers/postToSpotifyAPI')
-let accessToken
+
 const refreshToken = process.env.refresh_token
+let vm, Constructor
 
 before(() => {
-  // @TODO: Generate access token from refresh token
-  // console.log('good here')
-  // return postToSpotifyAPI('https://accounts.spotify.com/api/token', {
-  //   grant_type: 'refresh_token',
-  //   refresh_token: refreshToken
-  // })
-  //   .then(data => data.json())
-  //   .then((data) => {
-  //     accessToken = data.access_token
-  //   })
-  //   .catch((e) => {
-  //     console.error(e)
-  //   })
+  Constructor = Vue.extend(App)
+  vm = new Constructor({
+    propsData: {
+      mock: true
+    }
+  }).$mount()
 })
 
 describe('tokens', function () {
@@ -32,6 +25,10 @@ describe('tokens', function () {
 })
 
 describe('App', function () {
+  it('mounts', () => {
+    assert.strictEqual(vm.$el.querySelector('h1').textContent, 'Mock Title')
+  })
+
   it('has message "Hello world from Vue!"', () => {
     assert.strictEqual(App.data().message, 'Hello world from Vue!')
   })
