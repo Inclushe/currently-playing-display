@@ -32,6 +32,7 @@ export default {
       artists: 'Dog Blood, Skrillex, Boys Noize',
       coverArtImage: '',
       gradientImage: '',
+      thumbnailImage: '',
       currentlyPlaying: false,
       settings: {
         backgroundTypeIndex: 0
@@ -81,6 +82,7 @@ export default {
                 this.album = data.item.album.name
                 this.artists = data.item.artists.reduce((r, v) => { r.push(v.name); return r }, []).join(', ')
                 this.coverArtImage = data.item.album.images[0].url
+                this.thumbnailImage = data.item.album.images[data.item.album.images.length - 1].url
                 this.setGradient()
               }
             }
@@ -90,7 +92,7 @@ export default {
     },
     setGradient () {
       renderGradient({
-        imagePath: this.coverArtImage,
+        imagePath: this.thumbnailImage,
         height: 100,
         width: 100
       }).then(imageURI => {
