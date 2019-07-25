@@ -1,9 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const addresses = require('../helpers/addresses')
-const postToSpotifyAPI = require('../helpers/postToSpotifyAPI')
-require('dotenv').config()
+const mainRoute = require('../routes/main')
 const server = express()
+
+require('dotenv').config()
 
 server.use('/', express.static('client/dist', {
   maxAge: 1
@@ -12,66 +13,7 @@ server.use('/', express.static('client/dist', {
 server.use(bodyParser.urlencoded({ extended: true }))
 server.use(bodyParser.json())
 
-server.get('/status', (request, response) => {
-  response.send('OK')
-})
-
-// Redirect user to log in with Spotify
-server.get('/authorize', (request, response) => {
-  response.redirect(`https://accounts.spotify.com/authorize?client_id=${process.env.client_id}&response_type=code&redirect_uri=${process.env.redirect_uri}&scope=user-read-currently-playing`)
-})
-
-/*
-  Gives access and refresh tokens to the client.
-
-  This uses the Authorization Code flow described here:
-  https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
-
-  Access tokens expire one hour after requested.
-  Refresh tokens do not expire.
-*/
-server.get('/callback', (request, response, next) => {
-  if (request.query.code === undefined) {
-    return response.redirect(`/?error=code_not_found`)
-  }
-  postToSpotifyAPI('https://accounts.spotify.com/api/token', {
-    grant_type: 'authorization_code',
-    code: request.query.code
-  })
-    .then(data => data.json())
-    .then((data) => {
-      if (data.error !== undefined) {
-        response.redirect(`/?error=${data.error}`)
-      } else {
-        response.redirect(`/?access_token=${data.access_token}&refresh_token=${data.refresh_token}`)
-      }
-    })
-    .catch((e) => {
-      console.error(e)
-      next(e)
-    })
-})
-
-// Refreshes the access token, given refresh_token as a query
-server.get('/refresh', (request, response, next) => {
-  if (request.query.refresh_token === undefined) {
-    return response.json({
-      error: 'refresh_token_not_found'
-    })
-  }
-  postToSpotifyAPI('https://accounts.spotify.com/api/token', {
-    grant_type: 'refresh_token',
-    refresh_token: request.query.refresh_token
-  })
-    .then(data => data.json())
-    .then((data) => {
-      response.json(data)
-    })
-    .catch((e) => {
-      console.error(e)
-      next(e)
-    })
-})
+server.use('/', mainRoute)
 
 server.runOnPort = (portNumber, options) => {
   return server.listen(portNumber, () => {

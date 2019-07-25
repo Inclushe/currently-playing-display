@@ -53,5 +53,3 @@ function mockFetchReturningJSON (object) {
     })
   })
 }
-
-const runningInNode = typeof window === 'undefined'

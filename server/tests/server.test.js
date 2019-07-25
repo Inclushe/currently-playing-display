@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 const assert = require('assert')
+const queryValues = require('../helpers/queryValues')
 const server = require('../src/server')
 const supertest = require('supertest')
 
@@ -18,7 +19,7 @@ describe('server', () => {
 
   it('authorize route works', () => {
     return supertest(server)
-      .get('/authorize')
+      .get('/spotify/authorize')
       .then((response) => {
         assert.strictEqual(response.status, 302)
       })
@@ -26,7 +27,7 @@ describe('server', () => {
 
   it('callback route returns error', () => {
     return supertest(server)
-      .get('/callback')
+      .get('/spotify/callback')
       .then((response) => {
         const query = queryValues(response.headers.location)
         assert.strictEqual(query.error, 'code_not_found')
@@ -35,7 +36,7 @@ describe('server', () => {
 
   it('callback route valid mock gives an access token and refresh token', () => {
     return supertest(server)
-      .get('/callback?code=mock_valid')
+      .get('/spotify/callback?code=mock_valid')
       .then((response) => {
         const query = queryValues(response.headers.location)
         assert.strictEqual(query.access_token, 'mock_success')
@@ -45,7 +46,7 @@ describe('server', () => {
 
   it('callback route invalid mock gives an error', () => {
     return supertest(server)
-      .get('/callback?code=mock_invalid')
+      .get('/spotify/callback?code=mock_invalid')
       .then((response) => {
         const query = queryValues(response.headers.location)
         assert.strictEqual(query.error, 'mock_error')
@@ -54,7 +55,7 @@ describe('server', () => {
 
   it('refresh token path returns json error', () => {
     return supertest(server)
-      .get('/refresh')
+      .get('/spotify/refresh')
       .then((response) => {
         assert.strictEqual(JSON.parse(response.text).error, 'refresh_token_not_found')
       })
@@ -62,7 +63,7 @@ describe('server', () => {
 
   it('refresh route valid mock gives an access token', () => {
     return supertest(server)
-      .get('/refresh?refresh_token=mock_valid')
+      .get('/spotify/refresh?refresh_token=mock_valid')
       .then((response) => {
         assert.strictEqual(JSON.parse(response.text).access_token, 'mock_success')
       })
@@ -70,7 +71,7 @@ describe('server', () => {
 
   it('refresh route invalid mock gives an error', () => {
     return supertest(server)
-      .get('/refresh?refresh_token=mock_invalid')
+      .get('/spotify/refresh?refresh_token=mock_invalid')
       .then((response) => {
         assert.strictEqual(JSON.parse(response.text).error, 'mock_error')
       })
@@ -96,12 +97,3 @@ describe('server', () => {
       })
   })
 })
-
-function queryValues (url) {
-  return Array.from(url.slice(url.indexOf('?') + 1).split('&')).reduce((object, pair, index) => {
-    const key = pair.slice(0, pair.indexOf('='))
-    const value = pair.slice(pair.indexOf('=') + 1, pair.length)
-    object[key] = value
-    return object
-  }, {})
-}

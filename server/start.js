@@ -1,2 +1,2 @@
 const server = require('./src/server')
-server.runOnPort(8080)
+server.runOnPort(process.env.PORT || 8080)

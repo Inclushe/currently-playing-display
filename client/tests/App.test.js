@@ -2,8 +2,6 @@
 import Vue from 'vue'
 import App from '../src/public/components/App'
 const assert = require('assert')
-
-const refreshToken = process.env.refresh_token
 let vm, Constructor
 
 before(() => {
@@ -13,15 +11,6 @@ before(() => {
       mock: true
     }
   }).$mount()
-})
-
-describe('tokens', function () {
-  // it('has access token', () => {
-  //   assert(typeof access_token === 'string')
-  // })
-  // it('has refresh token', () => {
-  //   assert(typeof refresh_token === 'string')
-  // })
 })
 
 describe('App', function () {

@@ -1,3 +1,5 @@
+/* eslint-disable quote-props */
+
 exports.callbackSuccess = {
   'access_token': 'mock_success',
   'token_type': 'Bearer',
