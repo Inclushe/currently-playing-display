@@ -26,6 +26,7 @@ body
   &--gradient
     filter: blur(0.5em) brightness(0.9) saturate(4)
     transform: scale(1.1)
+    transition: opacity 500ms
     // animation: rotate 20s linear infinite
   &--opaque
     opacity: 0.5
@@ -38,9 +39,9 @@ body
 
 @keyframes move
   0%
-    background-position: 50% 30%
+    background-position: 50% 40%
   100%
-    background-position: 50% 70%
+    background-position: 50% 60%
 
 .display
   display: grid
@@ -81,7 +82,7 @@ body
       font-size: 4em
       font-family: "Barlow Semi Condensed", sans-serif
       font-weight: 400
-      color: #eee
+      opacity: 0.9
     h3
       margin: 0
       padding: 0
@@ -89,4 +90,4 @@ body
       font-size: 3em
       font-family: "Barlow Semi Condensed", sans-serif
       font-weight: 400
-      color: #eee
+      opacity: 0.9

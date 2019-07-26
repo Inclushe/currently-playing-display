@@ -1,10 +1,7 @@
 <template lang="pug">
   .app
-    .background(v-if="currentlyPlaying && (backgroundType === 'cover-art' || backgroundType === 'both')"
-                :style="{'background-image': `url('${coverArtImageURI}')`}")
-    .background.background--gradient(v-if="currentlyPlaying && (backgroundType === 'gradient' || backgroundType === 'both')"
-                                     :style="{'background-image': `url('${gradientImageURI}')`}"
-                                     :class="{'background--opaque': backgroundType === 'both'}")
+    .background(:style="{'background-image': `url('${coverArtImageURI}')`}")
+    .background.background--gradient(:style="{'background-image': `url('${gradientImageURI}')`, 'opacity': gradientOpacity}")
     .display(v-if="currentlyPlaying")
       .display__album-cover(:style="{'background-image': `url('${coverArtImageURI}')`}" @click="toggleBackground")
       .display__info
@@ -136,6 +133,21 @@ export default {
           break
       }
       return type
+    },
+    gradientOpacity () {
+      let value
+      switch (this.settings.backgroundTypeIndex) {
+        case 0:
+          value = 0
+          break
+        case 1:
+          value = 1
+          break
+        case 2:
+          value = 0.5
+          break
+      }
+      return value
     }
   }
 }
