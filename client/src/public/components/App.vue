@@ -8,13 +8,25 @@
         h1 {{ title }}
         h2 {{ album }}
         h3 {{ artists }}
-    div(v-else)
-      <a href="/spotify/authorize">Click here to authorize.</a>
+    .status-view(v-else-if="notPlaying")
+      h1 Nothing Playing
+      p.
+        Play a song on Spotify and it will show up here.
+      p.
+        Make sure your device is online with Private Listening turned off.
+    .status-view(v-else-if="error")
+      h1 Error
+      p This can usually be resolved by re-authenticating.
+      p <a href="/spotify/authorize">Click here to re-authenticate.</a>
+      pre {{ JSON.stringify(errorMessage, null, 2) }}
+    .status-view(v-else)
+      h1 Loading
 </template>
 
 <script>
 import renderGradient from 'give-me-a-gradient'
 
+// @TODO: make state in data
 export default {
   props: ['mock'],
   data () {
@@ -31,6 +43,9 @@ export default {
       coverArtImageURI: '',
       gradientImageURI: '',
       currentlyPlaying: false,
+      notPlaying: false,
+      error: false,
+      errorMessage: null,
       settings: {
         backgroundTypeIndex: 0
       },
@@ -61,6 +76,14 @@ export default {
         .then(json => {
           if (this.thereWereNoErrorsAndTrackChanged(json)) {
             this.populateDataWithTrackInfo(json)
+          } else if (json.error) {
+            this.errorMessage = json
+            this.currentlyPlaying = false
+            this.notPlaying = false
+            this.error = true
+          } else if (json.now_playing === false) {
+            this.currentlyPlaying = false
+            this.notPlaying = true
           }
         })
         .catch(console.error)
@@ -77,16 +100,18 @@ export default {
       // no response
       const NOT_PLAYING = 204
       const ACCESS_TOKEN_EXPIRED = 401
-      if (data.status === NOT_PLAYING || data.status === ACCESS_TOKEN_EXPIRED) {
-        return mockFetchReturningJSON({ error: 'error' })
+      if (data.status === ACCESS_TOKEN_EXPIRED) {
+        return data
+      } else if (data.status === NOT_PLAYING) {
+        return mockFetchReturningJSON({ now_playing: false })
       } else {
         return data
       }
     },
 
     thereWereNoErrorsAndTrackChanged (data) {
-      const thereWereNoErrors = (!data.error && data.item !== null)
-      const trackChanged = (this.spotify.current_track.item === undefined || (data.item !== null && this.spotify.current_track.item.id !== data.item.id))
+      const thereWereNoErrors = (!data.error && data.now_playing === undefined && data.item !== null)
+      const trackChanged = ((data.now_playing === undefined) && (this.spotify.current_track.item === undefined || (data.item !== null && this.spotify.current_track.item.id !== data.item.id)))
 
       return (thereWereNoErrors && trackChanged)
     },
@@ -95,6 +120,8 @@ export default {
       const isLocal = data.item.is_local || false
       this.spotify.current_track = data
       this.currentlyPlaying = true
+      this.notPlaying = false
+      this.error = false
       this.title = data.item.name
       this.album = data.item.album.name
       this.artists = data.item.artists.reduce((r, v) => { r.push(v.name); return r }, []).join(', ')

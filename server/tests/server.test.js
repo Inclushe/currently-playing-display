@@ -17,6 +17,14 @@ describe('server', () => {
       })
   })
 
+  it('start page route works', () => {
+    return supertest(server)
+      .get('/')
+      .then((response) => {
+        assert(/Home Page/.test(response.text))
+      })
+  })
+
   it('authorize route works', () => {
     return supertest(server)
       .get('/spotify/authorize')
@@ -77,9 +85,9 @@ describe('server', () => {
       })
   })
 
-  it('static route works for now', () => {
+  it('app route works', () => {
     return supertest(server)
-      .get('/')
+      .get('/app/')
       .then((response) => {
         assert(/Currently Playing Display/.test(response.text))
       })

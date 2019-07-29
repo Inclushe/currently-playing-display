@@ -27,9 +27,9 @@ exports.callback = (request, response, next) => {
     .then(data => data.json())
     .then(data => {
       if (data.error !== undefined) {
-        response.redirect(`/?error=${data.error}`)
+        response.redirect(`/app/?error=${data.error}`)
       } else {
-        response.redirect(`/?access_token=${data.access_token}&refresh_token=${data.refresh_token}&auth_provider=spotify`)
+        response.redirect(`/app/?access_token=${data.access_token}&refresh_token=${data.refresh_token}&auth_provider=spotify`)
       }
     })
     .catch(next)

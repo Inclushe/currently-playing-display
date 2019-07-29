@@ -45,7 +45,8 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
       - [ ] None
   - [?] Animate Gradient
     - Could be better
-  - [ ] Fix give-me-a-gradient to make gradients more saturated
+  - [?] Fix give-me-a-gradient to make gradients more saturated
+  - [ ] Recreate Figma designs
   - [ ] Animate Song Transitions
   - [ ] Design Intro Screen and Settings
   - [ ] Hide Unneccesary Info

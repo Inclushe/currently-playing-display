@@ -4,8 +4,22 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    link(rel="stylesheet" href="/public/stylesheets/reset.styl")
     link(rel="stylesheet" href="/public/stylesheets/index.styl")
-    title Currently Playing Display
+    title Document
   body
-    #app
-    script(src="/public/scripts/index.js")
+    .container
+      .homepage
+        section.logo
+          img(src="/public/images/logoplustext.svg")
+        section.text
+          h2 Show the info of the song you're playing on this screen.
+          h3 Connect with
+          a.button(href="/spotify/authorize")
+            img(src="/public/images/spotify-logo.svg")
+          h3 or watch the demo
+          footer
+            p.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores, iure.
+            a.logo(href="https://inclushe.com")
+              img(src="/public/images/inclushe_logo.svg")
