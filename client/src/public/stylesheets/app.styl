@@ -20,18 +20,47 @@ body
   background-color: $gray900
   background-size: cover
   background-position: center
+  // Allow enough contrast for the track info while keeping the color
   filter: blur(1em) brightness(0.7) saturate(1.3)
   transform: scale(1.2)
   overflow: hidden
-  z-index: 0
+  z-index: 1
   animation: move 60s ease-in-out infinite alternate
+  opacity: 1
   &--gradient
+    // Gradients are a bit too dull, so we improvise.
     filter: blur(0.5em) brightness(0.9) saturate(4)
     transform: scale(1.1)
     transition: opacity 500ms
-    // animation: rotate 20s linear infinite
   &--opaque
     opacity: 0.5
+
+.bg-transition
+  &-enter-active, &-leave-active
+    transition: opacity 2000ms ease-out 100ms, transform 2000ms ease-out 100ms
+  &-enter
+    opacity: 0
+    transform: scale(1.1)
+  &-leave-to
+    opacity: 1
+    transform: scale(1.3)
+
+.cover-transition
+  &-enter-active, &-leave-active
+    transition: opacity 1000ms ease-out 100ms, transform 1000ms ease-out 100ms
+  &-enter
+    opacity: 0
+  &-leave-to
+    opacity: 0
+
+.info-transition
+  &-enter-active, &-leave-active
+    transition: transform 1000ms cubic-bezier(0,1,0,1) 0ms
+  &-leave-active
+    transition: 0s
+    display: none
+  &-enter
+    transform: translateY(1rem)
 
 @keyframes rotate
   0%
@@ -112,7 +141,7 @@ body
     font-size: 2em
     line-height: 1.25
     color: $gray200
-    max-width: 15em
+    max-width: 14em
   a
     color: $purple400
   pre

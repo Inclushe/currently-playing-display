@@ -32,7 +32,8 @@
     "express": "^4.17.1",
     "give-me-a-gradient": "^0.2.2",
     "node-fetch": "^2.6.0",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
     "mocha": "^6.1.4",

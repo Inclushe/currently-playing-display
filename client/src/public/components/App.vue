@@ -1,20 +1,26 @@
 <template lang="pug">
   .app
-    .background(:style="{'background-image': `url('${coverArtImageURI}')`}")
-    .background.background--gradient(:style="{'background-image': `url('${gradientImageURI}')`, 'opacity': gradientOpacity}")
-    .display(v-if="currentlyPlaying")
-      .display__album-cover(:style="{'background-image': `url('${coverArtImageURI}')`}" @click="toggleBackground")
+    transition(name="bg-transition" :duration="2500")
+      .background(:style="{'background-image': `url('${coverArtImageURI}')`}" :key="coverArtImageURI")
+    transition(name="gradient-transition" :duration="2500")
+      .background.background--gradient(:style="{'background-image': `url('${gradientImageURI}')`, 'opacity': gradientOpacity}" :key="gradientImageURI")
+    .display(v-if="state === 'playing'")
+      transition(name="cover-transition" :duration="2500")
+        .display__album-cover(:style="{'background-image': `url('${coverArtImageURI}')`}" @click="toggleBackground" :key="coverArtImageURI")
       .display__info
-        h1 {{ title }}
-        h2 {{ album }}
-        h3 {{ artists }}
-    .status-view(v-else-if="notPlaying")
+        transition(name="info-transition" :duration="2500")
+          h1(:key="title") {{ title }}
+        transition(name="info-transition" :duration="2500")
+          h2(:key="album") {{ album }}
+        transition(name="info-transition" :duration="2500")
+          h3(:key="artists") {{ artists }}
+    .status-view(v-else-if="state === 'waiting'")
       h1 Nothing Playing
       p.
         Play a song on Spotify and it will show up here.
       p.
         Make sure your device is online with Private Listening turned off.
-    .status-view(v-else-if="error")
+    .status-view(v-else-if="state === 'error'")
       h1 Error
       p This can usually be resolved by re-authenticating.
       p <a href="/spotify/authorize">Click here to re-authenticate.</a>
@@ -42,8 +48,7 @@ export default {
       artists: 'Sample Artist 1, Sample Artist 2',
       coverArtImageURI: '',
       gradientImageURI: '',
-      currentlyPlaying: false,
-      notPlaying: false,
+      state: 'loading',
       error: false,
       errorMessage: null,
       settings: {
@@ -75,15 +80,18 @@ export default {
         .then(data => data.json())
         .then(json => {
           if (this.thereWereNoErrorsAndTrackChanged(json)) {
-            this.populateDataWithTrackInfo(json)
+            const isLocal = json.item.is_local || false
+            if (!isLocal) {
+              loadImage(json.item.album.images[0].url)
+                .then(this.populateDataWithTrackInfo(json))
+            } else {
+              this.populateDataWithTrackInfo(json)
+            }
           } else if (json.error) {
             this.errorMessage = json
-            this.currentlyPlaying = false
-            this.notPlaying = false
-            this.error = true
+            this.state = 'error'
           } else if (json.now_playing === false) {
-            this.currentlyPlaying = false
-            this.notPlaying = true
+            this.state = 'waiting'
           }
         })
         .catch(console.error)
@@ -91,7 +99,7 @@ export default {
 
     handleGetCurrentlyPlayingTrackMock () {
       this.title = 'Mock Title'
-      this.currentlyPlaying = true
+      this.state = 'playing'
     },
 
     handleRequestErrors (data) {
@@ -111,17 +119,18 @@ export default {
 
     thereWereNoErrorsAndTrackChanged (data) {
       const thereWereNoErrors = (!data.error && data.now_playing === undefined && data.item !== null)
-      const trackChanged = ((data.now_playing === undefined) && (this.spotify.current_track.item === undefined || (data.item !== null && this.spotify.current_track.item.id !== data.item.id)))
+      const trackChanged = data.item !== null && data.item !== undefined && ((data.now_playing === undefined) && (this.spotify.current_track.item === undefined || (data.item !== null && this.spotify.current_track.item.id !== data.item.id)))
 
       return (thereWereNoErrors && trackChanged)
     },
 
     populateDataWithTrackInfo (data) {
       const isLocal = data.item.is_local || false
+      if (!isLocal) {
+        this.coverArtImageURI = data.item.album.images[0].url
+      }
       this.spotify.current_track = data
-      this.currentlyPlaying = true
-      this.notPlaying = false
-      this.error = false
+      this.state = 'playing'
       this.title = data.item.name
       this.album = data.item.album.name
       this.artists = data.item.artists.reduce((r, v) => { r.push(v.name); return r }, []).join(', ')
@@ -200,4 +209,19 @@ function mockFetchReturningJSON (object) {
     })
   })
 }
+
+function loadImage (path) {
+  return new Promise((resolve, reject) => {
+    const image = new Image()
+    image.crossOrigin = 'anonymous'
+    image.src = path
+    image.onload = () => {
+      resolve(image)
+    }
+    image.onerror = (e) => {
+      reject(e)
+    }
+  })
+}
+
 </script>

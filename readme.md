@@ -46,15 +46,21 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
   - [?] Animate Gradient
     - Could be better
   - [?] Fix give-me-a-gradient to make gradients more saturated
-  - [ ] Recreate Figma designs
+  - [X] Recreate Figma designs
   - [ ] Animate Song Transitions
-  - [ ] Design Intro Screen and Settings
-  - [ ] Hide Unneccesary Info
-    - [ ] Self Titled Album
-    - [ ] Song is from a single album_type: "single"
-    - [ ] Or song title is same as album title
-    - [ ] Add as option?
-  - [ ] See how to work with Last.FM
+    - Mock in AE first
+  - [ ] Refresh token on expiration
+  - [ ] Eat Params
+  - [ ] Settings
+    - [ ] Implement
+      - [ ] Provider
+      - [ ] Background Type
+      - [ ] Animation Toggle
+      - [ ] Track Info
+  - [ ] Add Last.FM as Option
+    - [ ] Make input box that takes username on homepage
+    - [ ] Add functionality to app
+    - [ ] Get album covers from musicbrainz
 
 ## Bugs
 
