@@ -17,7 +17,10 @@ body
   align-items: center
   section
     margin: 5.5em
-    width: 44em
+    max-width: 44em
+  section.logo
+    img
+      width: 100%
   section.text
     h2
       padding-bottom: 1em
@@ -74,3 +77,11 @@ body
         padding-top: 1em
         display: block
         text-align: center
+
+@media screen and (max-width: 75em)
+  .container
+    height: auto
+  .homepage
+    flex-direction: column
+    section
+      margin: 1em

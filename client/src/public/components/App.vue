@@ -1,18 +1,18 @@
 <template lang="pug">
   .app
-    transition(name="bg-transition" :duration="2500")
+    transition(name="bg-transition" :duration="4500")
       .background(:style="{'background-image': `url('${coverArtImageURI}')`}" :key="coverArtImageURI")
-    transition(name="gradient-transition" :duration="2500")
+    transition(name="gradient-transition" :duration="4500")
       .background.background--gradient(:style="{'background-image': `url('${gradientImageURI}')`, 'opacity': gradientOpacity}" :key="gradientImageURI")
     .display(v-if="state === 'playing'")
-      transition(name="cover-transition" :duration="2500")
+      transition(name="cover-transition" :duration="4500")
         .display__album-cover(:style="{'background-image': `url('${coverArtImageURI}')`}" @click="toggleBackground" :key="coverArtImageURI")
       .display__info
-        transition(name="info-transition" :duration="2500")
+        transition(name="info-transition" :duration="1500")
           h1(:key="title") {{ title }}
-        transition(name="info-transition" :duration="2500")
+        transition(name="info-transition" :duration="1500")
           h2(:key="album") {{ album }}
-        transition(name="info-transition" :duration="2500")
+        transition(name="info-transition" :duration="1500")
           h3(:key="artists") {{ artists }}
     .status-view(v-else-if="state === 'waiting'")
       h1 Nothing Playing
@@ -26,7 +26,7 @@
       p <a href="/spotify/authorize">Click here to re-authenticate.</a>
       pre {{ JSON.stringify(errorMessage, null, 2) }}
     .status-view(v-else)
-      h1 Loading
+      h1.loading Loading
 </template>
 
 <script>
@@ -83,7 +83,9 @@ export default {
             const isLocal = json.item.is_local || false
             if (!isLocal) {
               loadImage(json.item.album.images[0].url)
-                .then(this.populateDataWithTrackInfo(json))
+                .then(() => {
+                  this.populateDataWithTrackInfo(json)
+                })
             } else {
               this.populateDataWithTrackInfo(json)
             }
@@ -120,8 +122,9 @@ export default {
     thereWereNoErrorsAndTrackChanged (data) {
       const thereWereNoErrors = (!data.error && data.now_playing === undefined && data.item !== null)
       const trackChanged = data.item !== null && data.item !== undefined && ((data.now_playing === undefined) && (this.spotify.current_track.item === undefined || (data.item !== null && this.spotify.current_track.item.id !== data.item.id)))
+      const stateIsNotPlaying = this.state !== 'playing'
 
-      return (thereWereNoErrors && trackChanged)
+      return (thereWereNoErrors && (trackChanged || stateIsNotPlaying))
     },
 
     populateDataWithTrackInfo (data) {
@@ -137,16 +140,17 @@ export default {
       if (!isLocal) {
         this.coverArtImageURI = data.item.album.images[0].url
       }
-      this.setGradient()
+      // this.setGradient()
     },
 
-    setGradient () {
-      renderGradient({
-        imagePath: this.coverArtImageURI,
+    setGradient (url) {
+      return renderGradient({
+        imagePath: url,
         height: 100,
         width: 100
       }).then(imageURI => {
         this.gradientImageURI = imageURI
+        return true
       })
     },
 
@@ -213,7 +217,7 @@ function mockFetchReturningJSON (object) {
 function loadImage (path) {
   return new Promise((resolve, reject) => {
     const image = new Image()
-    image.crossOrigin = 'anonymous'
+    // cross origin messes with the cache
     image.src = path
     image.onload = () => {
       resolve(image)

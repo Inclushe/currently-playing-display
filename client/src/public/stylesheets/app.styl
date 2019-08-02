@@ -12,12 +12,12 @@ body
   justify-content: center
   align-items: center
   height: 100vh
+  background-color: $gray900
 
 .background
   position: absolute
   height: 100%
   width: 100%
-  background-color: $gray900
   background-size: cover
   background-position: center
   // Allow enough contrast for the track info while keeping the color
@@ -37,7 +37,7 @@ body
 
 .bg-transition
   &-enter-active, &-leave-active
-    transition: opacity 2000ms ease-out 100ms, transform 2000ms ease-out 100ms
+    transition: opacity 2000ms ease-out 50ms, transform 2000ms ease-out 50ms
   &-enter
     opacity: 0
     transform: scale(1.1)
@@ -47,20 +47,20 @@ body
 
 .cover-transition
   &-enter-active, &-leave-active
-    transition: opacity 1000ms ease-out 100ms, transform 1000ms ease-out 100ms
+    transition: opacity 1000ms ease-out 50ms, transform 2000ms ease-out 50ms
   &-enter
     opacity: 0
   &-leave-to
     opacity: 0
 
-.info-transition
+.display__info .info-transition
   &-enter-active, &-leave-active
     transition: transform 1000ms cubic-bezier(0,1,0,1) 0ms
   &-leave-active
     transition: 0s
     display: none
   &-enter
-    transform: translateY(1rem)
+    transform: translateY(0.5rem)
 
 @keyframes rotate
   0%
@@ -76,9 +76,9 @@ body
 
 .display
   display: grid
-  grid-template-rows: repeat(12, 4em)
-  grid-template-columns: repeat(20, 4em)
-  grid-gap: 1em
+  grid-template-rows: repeat(12, 3.25vw)
+  grid-template-columns: repeat(20, 3.25vw)
+  grid-gap: 1vw
   color: white
   z-index: 1
   &__album-cover
@@ -88,6 +88,7 @@ body
     border-radius: 1em
     background-size: cover
     background-position: center
+    background-repeat: no-repeat
     box-shadow: 0 4em 8em rgba(0, 0, 0, 0.2),
                 0 1em 2em rgba(0, 0, 0, 0.5),
                 inset 0 0 0.5em rgba(0, 0, 0, 0.5)
@@ -97,6 +98,8 @@ body
     display: flex
     flex-direction: column
     justify-content: center
+    h1, h2, h3
+      transform: translateY(0rem)
     h1
       margin: 0
       padding: 0
@@ -123,9 +126,36 @@ body
       font-weight: 400
       opacity: 0.9
 
+@media screen and (max-width: 75em)
+  .display__info
+    h1
+      font-size: 6em * 0.75
+    h2
+      font-size: 2em * 0.75
+    h3
+      font-size: 1.5em * 0.75
+
+@media screen and (max-width: 64em)
+  .display__info
+    h1
+      font-size: 6em * 0.5
+    h2
+      font-size: 2em * 0.625
+    h3
+      font-size: 1.5em * 0.75
+
+@media screen and (max-width: 48em)
+  .display__info
+    h1
+      font-size: 6em * 0.25
+    h2
+      font-size: 2em * 0.5
+    h3
+      font-size: 1.5em * 0.75
 
 .status-view
   z-index: 1
+  padding: 1em
   h1
     font-family: $mainFont
     font-size: 2em
@@ -148,10 +178,9 @@ body
     margin-top: 2em
     color: $gray200
 
-@keyframes loading
-  0%
-    transform: scaleX(1)
-  50%
-    transform: scaleX(1.1)
-  100%
-    transform: scaleX(1)
+@media screen and (max-width: 64em)
+  .status-view
+    h1
+      font-size: 2em * 0.75
+    p
+      font-size: 2em * 0.75
