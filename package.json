@@ -9,9 +9,9 @@
   "main": "index.js",
   "scripts": {
     "build": "parcel build client/src/index.pug client/src/app/index.pug --out-dir client/dist",
-    "serve": "npm run build && nodemon server/start.js",
+    "serve": "npm run build && nodemon --delay 500 server/start.js",
     "test": "npm run test:client:build && npm run test:client && npm run test:server",
-    "watch": "concurrently \"parcel watch client/src/index.pug client/src/app/index.pug --out-dir client/dist\" \"nodemon server/start.js\"",
+    "watch": "concurrently \"parcel watch client/src/index.pug client/src/app/index.pug --out-dir client/dist\" \"nodemon --delay 500 server/start.js\"",
     "test:client": "npm run test:client:build && mocha ./client/.temp --reporter min --require jsdom-global/register",
     "test:client:build": "parcel build client/tests/App.test.js --out-dir client/.temp --log-level 1",
     "test:client:watch": "npm run test:client:build && concurrently \"npm run test:client:parcel:watch\" \"mocha --watch ./client/.temp --reporter min --require jsdom-global/register\"",

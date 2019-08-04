@@ -22,10 +22,9 @@ body
   background-position: center
   // Allow enough contrast for the track info while keeping the color
   filter: blur(1em) brightness(0.7) saturate(1.3)
-  transform: scale(1.2)
+  transform: translateZ(0) scale(1.3)
   overflow: hidden
   z-index: 1
-  animation: move 60s ease-in-out infinite alternate
   opacity: 1
   &--gradient
     // Gradients are a bit too dull, so we improvise.
@@ -40,10 +39,10 @@ body
     transition: opacity 2000ms ease-out 50ms, transform 2000ms ease-out 50ms
   &-enter
     opacity: 0
-    transform: scale(1.1)
+    transform: translateZ(0) scale(1.2)
   &-leave-to
     opacity: 1
-    transform: scale(1.3)
+    transform: translateZ(0) scale(1.4)
 
 .cover-transition
   &-enter-active, &-leave-active
@@ -61,18 +60,6 @@ body
     display: none
   &-enter
     transform: translateY(0.5rem)
-
-@keyframes rotate
-  0%
-    transform: rotate(0deg) scale(2.2)
-  100%
-    transform: rotate(360deg) scale(2.2)
-
-@keyframes move
-  0%
-    background-position: 50% 40%
-  100%
-    background-position: 50% 60%
 
 .display
   display: grid
@@ -99,7 +86,7 @@ body
     flex-direction: column
     justify-content: center
     h1, h2, h3
-      transform: translateY(0rem)
+      transform: translateZ(0)
     h1
       margin: 0
       padding: 0
@@ -184,3 +171,29 @@ body
       font-size: 2em * 0.75
     p
       font-size: 2em * 0.75
+
+.settings-button
+  position: absolute
+  margin: 2em
+  padding: 1em
+  border-radius: 1em
+  bottom: 0
+  right: 0
+  background: $gray900
+  z-index: 1
+  display: flex
+  align-items: center
+  box-shadow: 0 4em 8em rgba(0, 0, 0, 0.2),
+              0 1em 2em rgba(0, 0, 0, 0.5)
+  span
+    margin-left: 0.5em
+    font-family: $mainFont
+    font-size: 2em
+    font-weight: 900
+    line-height: 1.25
+    color: $gray100
+    letter-spacing: 0.125em
+    text-transform: uppercase
+
+.settings
+  background: #000

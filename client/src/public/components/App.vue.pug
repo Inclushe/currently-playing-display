@@ -1,0 +1,31 @@
+.app
+  transition(name="bg-transition" :duration="4500")
+    .background(:style="{'background-image': `url('${coverArtImageURI}')`}" :key="coverArtImageURI")
+  transition(name="gradient-transition" :duration="4500")
+    .background.background--gradient(:style="{'background-image': `url('${gradientImageURI}')`, 'opacity': gradientOpacity}" :key="gradientImageURI")
+  .display(v-if="state === 'playing'")
+    transition(name="cover-transition" :duration="4500")
+      .display__album-cover(:style="{'background-image': `url('${coverArtImageURI}')`}" @click="toggleBackground" :key="coverArtImageURI")
+    .display__info
+      transition(name="info-transition" :duration="1500")
+        h1(:key="title") {{ title }}
+      transition(name="info-transition" :duration="1500")
+        h2(:key="album") {{ album }}
+      transition(name="info-transition" :duration="1500")
+        h3(:key="artists") {{ artists }}
+  .status-view(v-else-if="state === 'waiting'")
+    h1 Nothing Playing
+    p.
+      Play a song on Spotify and it will show up here.
+    p.
+      Make sure your device is online with Private Listening turned off.
+  .status-view(v-else-if="state === 'error'")
+    h1 Error
+    p This can usually be resolved by re-authenticating.
+    p <a href="/spotify/authorize">Click here to re-authenticate.</a>
+    pre {{ JSON.stringify(errorMessage, null, 2) }}
+  .status-view(v-else)
+    h1.loading Loading
+  .settings-button
+    img(src="../images/twotone-settings-24px.svg")
+    span Settings

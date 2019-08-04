@@ -1,40 +1,10 @@
-<template lang="pug">
-  .app
-    transition(name="bg-transition" :duration="4500")
-      .background(:style="{'background-image': `url('${coverArtImageURI}')`}" :key="coverArtImageURI")
-    transition(name="gradient-transition" :duration="4500")
-      .background.background--gradient(:style="{'background-image': `url('${gradientImageURI}')`, 'opacity': gradientOpacity}" :key="gradientImageURI")
-    .display(v-if="state === 'playing'")
-      transition(name="cover-transition" :duration="4500")
-        .display__album-cover(:style="{'background-image': `url('${coverArtImageURI}')`}" @click="toggleBackground" :key="coverArtImageURI")
-      .display__info
-        transition(name="info-transition" :duration="1500")
-          h1(:key="title") {{ title }}
-        transition(name="info-transition" :duration="1500")
-          h2(:key="album") {{ album }}
-        transition(name="info-transition" :duration="1500")
-          h3(:key="artists") {{ artists }}
-    .status-view(v-else-if="state === 'waiting'")
-      h1 Nothing Playing
-      p.
-        Play a song on Spotify and it will show up here.
-      p.
-        Make sure your device is online with Private Listening turned off.
-    .status-view(v-else-if="state === 'error'")
-      h1 Error
-      p This can usually be resolved by re-authenticating.
-      p <a href="/spotify/authorize">Click here to re-authenticate.</a>
-      pre {{ JSON.stringify(errorMessage, null, 2) }}
-    .status-view(v-else)
-      h1.loading Loading
-</template>
-
 <script>
+import appPug from './App.vue.pug'
 import renderGradient from 'give-me-a-gradient'
 
-// @TODO: make state in data
 export default {
   props: ['mock'],
+  template: appPug,
   data () {
     return {
       message: 'Hello world from Vue!',
@@ -58,42 +28,39 @@ export default {
     }
   },
   mounted () {
-    const query = getQueriesFromURL()
-    if (query.auth_provider === 'spotify') {
-      this.spotify.access_token = query.access_token
-      this.spotify.refresh_token = query.refresh_token
+    const queries = getQueriesFromURL()
+    saveCredentialsToLocalStorage(queries)
+    const credentials = getCredentialsFromLocalStorage([
+      'access_token',
+      'refresh_token',
+      'auth_provider'
+    ])
+    removeQueriesFromURL()
+    if (credentials.auth_provider === 'spotify') {
+      this.spotify.access_token = credentials.access_token
+      this.spotify.refresh_token = credentials.refresh_token
     }
     this.getCurrentlyPlayingTrackInterval = setInterval(this.getCurrentlyPlayingTrack, 1000)
     this.getCurrentlyPlayingTrack()
   },
   methods: {
     getCurrentlyPlayingTrack () {
-      if (this.mock === true) return this.handleGetCurrentlyPlayingTrackMock()
+      const app = this
+      if (app.mock === true) return this.handleGetCurrentlyPlayingTrackMock()
 
-      fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.spotify.access_token}`
-        }
-      })
-        .then(this.handleRequestErrors)
+      app.fetchCurrentlyPlayingTrack()
+        .then(app.refreshAccessTokenIfNeeded)
+        .then(app.handleRequestErrors)
         .then(data => data.json())
         .then(json => {
-          if (this.thereWereNoErrorsAndTrackChanged(json)) {
-            const isLocal = json.item.is_local || false
-            if (!isLocal) {
-              loadImage(json.item.album.images[0].url)
-                .then(() => {
-                  this.populateDataWithTrackInfo(json)
-                })
-            } else {
-              this.populateDataWithTrackInfo(json)
-            }
+          if (app.thereWereNoErrorsAndTrackChanged(json)) {
+            preloadAlbumArt(json)
+              .then(app.populateDataWithTrackInfo(json))
           } else if (json.error) {
-            this.errorMessage = json
-            this.state = 'error'
+            app.errorMessage = json
+            app.state = 'error'
           } else if (json.now_playing === false) {
-            this.state = 'waiting'
+            app.state = 'waiting'
           }
         })
         .catch(console.error)
@@ -102,6 +69,33 @@ export default {
     handleGetCurrentlyPlayingTrackMock () {
       this.title = 'Mock Title'
       this.state = 'playing'
+    },
+
+    fetchCurrentlyPlayingTrack (data) {
+      return fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.spotify.access_token}`
+        }
+      })
+    },
+
+    refreshAccessTokenIfNeeded (data) {
+      const app = this
+      const ACCESS_TOKEN_EXPIRED = 401
+      if (data.status === ACCESS_TOKEN_EXPIRED) {
+        return new Promise((resolve, reject) => {
+          fetch(`/spotify/refresh?refresh_token=${this.spotify.refresh_token}`)
+            .then(data => data.json())
+            .then(json => {
+              app.spotify.access_token = json.access_token
+              resolve(app.fetchCurrentlyPlayingTrack())
+            })
+            .catch(reject)
+        })
+      } else {
+        return data
+      }
     },
 
     handleRequestErrors (data) {
@@ -204,6 +198,23 @@ function getQueriesFromURL () {
   }, {})
 }
 
+function saveCredentialsToLocalStorage (queries) {
+  const keys = Object.keys(queries)
+  keys.forEach(key => localStorage.setItem(key, queries[key]))
+}
+
+function getCredentialsFromLocalStorage (array) {
+  const credentials = {}
+  array.forEach(credential => {
+    credentials[credential] = localStorage.getItem(credential)
+  })
+  return credentials
+}
+
+function removeQueriesFromURL () {
+  window.history.replaceState({}, '', '/app/')
+}
+
 function mockFetchReturningJSON (object) {
   return new Promise((resolve, reject) => {
     resolve({
@@ -214,18 +225,17 @@ function mockFetchReturningJSON (object) {
   })
 }
 
-function loadImage (path) {
+function preloadAlbumArt (json) {
   return new Promise((resolve, reject) => {
+    if (isLocalTrack(json)) { resolve() }
     const image = new Image()
-    // cross origin messes with the cache
-    image.src = path
-    image.onload = () => {
-      resolve(image)
-    }
-    image.onerror = (e) => {
-      reject(e)
-    }
+    image.src = json.item.album.images[0].url
+    image.onload = resolve
+    image.onerror = reject
   })
 }
 
+function isLocalTrack (json) {
+  return json.item.is_local || false
+}
 </script>
