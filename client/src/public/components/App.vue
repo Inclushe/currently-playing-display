@@ -16,6 +16,7 @@ export default {
       title: 'Sample Song Title',
       album: 'Sample Album Title',
       artists: 'Sample Artist 1, Sample Artist 2',
+      isLocalTrack: false,
       coverArtImageURI: '',
       gradientImageURI: '',
       state: 'loading',
@@ -115,7 +116,7 @@ export default {
 
     thereWereNoErrorsAndTrackChanged (data) {
       const thereWereNoErrors = (!data.error && data.now_playing === undefined && data.item !== null)
-      const trackChanged = data.item !== null && data.item !== undefined && ((data.now_playing === undefined) && (this.spotify.current_track.item === undefined || (data.item !== null && this.spotify.current_track.item.id !== data.item.id)))
+      const trackChanged = data.item !== null && data.item !== undefined && ((data.now_playing === undefined) && (this.spotify.current_track.item === undefined || (data.item !== null && ((this.spotify.current_track.item.id !== data.item.id) || data.item.id === null))))
       const stateIsNotPlaying = this.state !== 'playing'
 
       return (thereWereNoErrors && (trackChanged || stateIsNotPlaying))
@@ -123,7 +124,10 @@ export default {
 
     populateDataWithTrackInfo (data) {
       const isLocal = data.item.is_local || false
-      if (!isLocal) {
+      if (isLocal) {
+        this.isLocalTrack = true
+      } else {
+        this.isLocalTrack = false
         this.coverArtImageURI = data.item.album.images[0].url
       }
       this.spotify.current_track = data
@@ -198,9 +202,9 @@ function getQueriesFromURL () {
   }, {})
 }
 
-function saveCredentialsToLocalStorage (queries) {
-  const keys = Object.keys(queries)
-  keys.forEach(key => localStorage.setItem(key, queries[key]))
+function saveCredentialsToLocalStorage (credentials) {
+  const keys = Object.keys(credentials)
+  keys.forEach(key => localStorage.setItem(key, credentials[key]))
 }
 
 function getCredentialsFromLocalStorage (array) {

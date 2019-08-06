@@ -1,12 +1,12 @@
 .app
-  transition(name="bg-transition" :duration="4500")
+  transition(v-if="!isLocalTrack" name="bg-transition" :duration="4500")
     .background(:style="{'background-image': `url('${coverArtImageURI}')`}" :key="coverArtImageURI")
   transition(name="gradient-transition" :duration="4500")
     .background.background--gradient(:style="{'background-image': `url('${gradientImageURI}')`, 'opacity': gradientOpacity}" :key="gradientImageURI")
   .display(v-if="state === 'playing'")
     transition(name="cover-transition" :duration="4500")
-      .display__album-cover(:style="{'background-image': `url('${coverArtImageURI}')`}" @click="toggleBackground" :key="coverArtImageURI")
-    .display__info
+      .display__album-cover(v-if="!isLocalTrack" :style="{'background-image': `url('${coverArtImageURI}')`}" @click="toggleBackground" :key="coverArtImageURI")
+    .display__info(:class="{ 'display__info--local': isLocalTrack }")
       transition(name="info-transition" :duration="1500")
         h1(:key="title") {{ title }}
       transition(name="info-transition" :duration="1500")
@@ -29,3 +29,39 @@
   .settings-button
     img(src="../images/twotone-settings-24px.svg")
     span Settings
+  .settings
+    header.settings__header
+      h1
+        img(src="../images/twotone-settings-24px.svg")
+        span Settings
+      .settings__close-button
+        img(src="../images/twotone-close-24px.svg")
+        span Close
+    section.settings__setting
+      h2 Provider
+      .settings__radio
+        a.settings__radio-button.settings__radio-button--provider(href="/spotify/authorize")
+          img(src="../images/spotify-logo.svg")
+        a.settings__radio-button.settings__radio-button--provider(href="/spotify/authorize")
+          img(src="../images/spotify-logo.svg")
+    section.settings__setting
+      h2 Background
+      .settings__radio
+        a.settings__radio-button.settings__radio-button--background(href="/spotify/authorize")
+          img(src="../images/background-cover.svg")
+          span Album Art
+        a.settings__radio-button.settings__radio-button--background(href="/spotify/authorize")
+          img(src="../images/background-gradient.svg")
+          span Gradient
+        a.settings__radio-button.settings__radio-button--background(href="/spotify/authorize")
+          img(src="../images/background-both.svg")
+          span Both
+        a.settings__radio-button.settings__radio-button--background(href="/spotify/authorize")
+          img(src="../images/background-solid.svg")
+          span Solid Color
+    section.settings__setting
+      h2 Animations
+    section.settings__setting
+      h2 Track Info
+    section.settings__setting
+      h2 Reset

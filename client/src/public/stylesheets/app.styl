@@ -85,6 +85,9 @@ body
     display: flex
     flex-direction: column
     justify-content: center
+    &--local
+      grid-column: 1 / -1
+      align-items: center
     h1, h2, h3
       transform: translateZ(0)
     h1
@@ -185,10 +188,12 @@ body
   align-items: center
   box-shadow: 0 4em 8em rgba(0, 0, 0, 0.2),
               0 1em 2em rgba(0, 0, 0, 0.5)
+  img
+    height: 2em
   span
     margin-left: 0.5em
     font-family: $mainFont
-    font-size: 2em
+    font-size: 1.5em
     font-weight: 900
     line-height: 1.25
     color: $gray100
@@ -196,4 +201,86 @@ body
     text-transform: uppercase
 
 .settings
-  background: #000
+  position: absolute
+  padding: 2em
+  top: 2em
+  width: 40em
+  max-width: 40em
+  background: $gray900
+  color: $gray100
+  border-radius: 1em
+  z-index: 1
+  header.settings__header
+    display: flex
+    justify-content: space-between
+    align-items: center
+  h1
+    display: flex
+    align-items: center
+    img
+      height: 1.5em
+    span
+      margin-left: 0.25em
+      font-family: $mainFont
+      font-size: 1.5em
+      font-weight: 900
+      color: $gray100
+      letter-spacing: 0.125em
+      text-transform: uppercase
+  div.settings__close-button
+    padding: 0.5em 2em
+    border-radius: 1em
+    background: $gray700
+    display: flex
+    align-items: center
+    img
+      width: 2.5em
+    span
+      margin-left: 0.25em
+      font-family: $mainFont
+      font-size: 1.5em
+      font-weight: 900
+      color: $gray100
+      letter-spacing: 0.125em
+      text-transform: uppercase
+  section.settings__setting
+    margin-top: 2em
+    h2
+      margin-left: 0.325em
+      font-family: $mainFont
+      font-size: 1.5em
+      font-weight: 900
+      color: $gray100
+      letter-spacing: 0.125em
+      text-transform: uppercase
+    .settings__radio
+      margin-top: 1em
+      display: flex
+      justify-content: space-between
+      a.settings__radio-button
+        box-sizing: border-box
+        margin: 0 .5em
+        display: block
+        // width: 100%
+        background: $spotifyGreen
+        border-radius: 1em
+        display: flex
+        justify-content: center
+        align-items: center
+        img
+          height: 4em
+        &--provider
+          height: 7em
+          width: 100%
+        &--background
+          flex-direction: column
+          background: none
+          text-decoration: none
+          color: inherit
+          img
+            height: 100%
+            width: 100%
+          span
+            margin-top: 0.5em
+            font-family: "Barlow", sans-serif
+            font-size: 1.5em
