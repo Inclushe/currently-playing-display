@@ -257,7 +257,8 @@ body
       margin-top: 1em
       display: flex
       justify-content: space-between
-      a.settings__radio-button
+      label.settings__radio-button
+        position: relative
         box-sizing: border-box
         margin: 0 .5em
         display: block
@@ -267,20 +268,51 @@ body
         display: flex
         justify-content: center
         align-items: center
+        cursor: pointer
+        input
+          position: absolute
+          clip-path: polygon(0 0)
+        span.input-span
+          position: absolute
+          height: 100%
+          width: 100%
+          color: transparent
+          &::after
+            content: ''
+            display: block
+            position: absolute
+            background: white
+            bottom: 1em
+            right: 1em
+            height: 1.5em
+            width: 1.5em
+            background: url('../images/radio-unchecked.svg')
+        & > input:checked + span.input-span
+          box-shadow: inset 0 0 0 0.25em $gray100
+          border-radius: 1em
+        & > input:checked + span.input-span::after
+          background: url('../images/radio-checked.svg')
         img
-          height: 4em
+          height: 3em
         &--provider
           height: 7em
           width: 100%
         &--background
-          flex-direction: column
-          background: none
-          text-decoration: none
-          color: inherit
+          height: 7em
+          width: 7em
+          margin-bottom: 2em
+          background-size: cover
+          // flex-direction: column
+          // background: none
+          // text-decoration: none
+          // color: inherit
           img
             height: 100%
             width: 100%
-          span
+          span.description
+            position: absolute
+            bottom: -1.5em
+            color: inherit
             margin-top: 0.5em
             font-family: "Barlow", sans-serif
             font-size: 1.5em
