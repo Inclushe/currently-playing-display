@@ -1,0 +1,13 @@
+.status-view(v-else-if="state === 'waiting'")
+  h1 Nothing Playing
+  p.
+    Play a song on Spotify and it will show up here.
+  p.
+    Make sure your device is online with Private Listening turned off.
+.status-view(v-else-if="state === 'error'")
+  h1 Error
+  p This can usually be resolved by re-authenticating.
+  p <a href="/spotify/authorize">Click here to re-authenticate.</a>
+  pre {{ JSON.stringify(errorMessage, null, 2) }}
+.status-view(v-else)
+  h1.loading Loading

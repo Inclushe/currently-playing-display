@@ -3,7 +3,7 @@
 body
   margin: 0
   padding: 0
-  background: #3e7690
+  background: $gray900
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
   overflow: hidden
 
@@ -11,7 +11,7 @@ body
   display: flex
   justify-content: center
   align-items: center
-  height: 100vh
+  min-height: 100vh
   background-color: $gray900
 
 .background
@@ -204,12 +204,17 @@ body
   position: absolute
   padding: 2em
   top: 2em
+  height: calc(100vh - 8em)
   width: 40em
   max-width: 40em
   background: $gray900
   color: $gray100
   border-radius: 1em
   z-index: 1
+  div.scroll
+    margin-top: 1em
+    height: calc(100vh - 12em)
+    overflow-y: auto
   header.settings__header
     display: flex
     justify-content: space-between
@@ -247,6 +252,7 @@ body
     margin-top: 2em
     h2
       margin-left: 0.325em
+      margin-bottom: 1em
       font-family: $mainFont
       font-size: 1.5em
       font-weight: 900
@@ -254,7 +260,6 @@ body
       letter-spacing: 0.125em
       text-transform: uppercase
     .settings__radio
-      margin-top: 1em
       display: flex
       justify-content: space-between
       label.settings__radio-button
@@ -282,8 +287,8 @@ body
             display: block
             position: absolute
             background: white
-            bottom: 1em
-            right: 1em
+            bottom: 0.75em
+            right: 0.75em
             height: 1.5em
             width: 1.5em
             background: url('../images/radio-unchecked.svg')
@@ -298,8 +303,8 @@ body
           height: 7em
           width: 100%
         &--background
-          height: 7em
-          width: 7em
+          height: 8em
+          width: 8em
           margin-bottom: 2em
           background-size: cover
           // flex-direction: column
@@ -316,3 +321,25 @@ body
             margin-top: 0.5em
             font-family: "Barlow", sans-serif
             font-size: 1.5em
+    label.settings__checkbox-toggle
+      position: relative
+      margin-top: 1em
+      input
+        clip-path: polygon(0 0)
+      span
+        cursor: pointer
+        margin-left: 1.5rem
+        font-family: "Barlow", sans-serif
+        font-size: 1.5em
+        vertical-align: sub
+        &::after
+          content: ''
+          display: block
+          position: absolute
+          top: 0
+          left: 0.5rem
+          height: 1.5rem
+          width: 1.5rem
+          background-image: url('../images/checkbox-unchecked.svg')
+      & > input:checked + span::after
+        background-image: url('../images/checkbox-checked.svg')

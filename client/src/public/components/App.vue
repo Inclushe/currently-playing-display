@@ -23,6 +23,7 @@ export default {
       error: false,
       errorMessage: null,
       settings: {
+        active: false,
         backgroundTypeIndex: 0
       },
       getCurrentlyPlayingTrackInterval: null
@@ -154,6 +155,10 @@ export default {
 
     toggleBackground () {
       this.settings.backgroundTypeIndex = (this.settings.backgroundTypeIndex + 1) % 3
+    },
+
+    toggleSettings () {
+      this.settings.active = !this.settings.active
     }
   },
   computed: {

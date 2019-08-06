@@ -1,0 +1,10 @@
+.display(v-if="state === 'playing'")
+  transition(name="cover-transition" :duration="4500")
+    .display__album-cover(v-if="!isLocalTrack" :style="{'background-image': `url('${coverArtImageURI}')`}" @click="toggleBackground" :key="coverArtImageURI")
+  .display__info(:class="{ 'display__info--local': isLocalTrack }")
+    transition(name="info-transition" :duration="1500")
+      h1(:key="title") {{ title }}
+    transition(name="info-transition" :duration="1500")
+      h2(:key="album") {{ album }}
+    transition(name="info-transition" :duration="1500")
+      h3(:key="artists") {{ artists }}
