@@ -24,7 +24,8 @@ export default {
       errorMessage: null,
       settings: {
         active: false,
-        backgroundTypeIndex: 0
+        backgroundTypeIndex: 0,
+        useTransitions: true
       },
       getCurrentlyPlayingTrackInterval: null
     }
@@ -159,6 +160,10 @@ export default {
 
     toggleSettings () {
       this.settings.active = !this.settings.active
+    },
+
+    reauthSpotify () {
+      document.location = '/spotify/authorize'
     }
   },
   computed: {

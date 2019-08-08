@@ -30,9 +30,12 @@ body
     // Gradients are a bit too dull, so we improvise.
     filter: blur(0.5em) brightness(0.9) saturate(4)
     transform: scale(1.1)
-    transition: opacity 500ms
+    // transition: opacity 500ms
   &--opaque
     opacity: 0.5
+
+.transitions-disabled
+  transition: none !important
 
 .bg-transition
   &-enter-active, &-leave-active
@@ -211,6 +214,8 @@ body
   color: $gray100
   border-radius: 1em
   z-index: 1
+  box-shadow: 0 4em 8em rgba(0, 0, 0, 0.2),
+              0 1em 2em rgba(0, 0, 0, 0.5)
   div.scroll
     margin-top: 1em
     height: calc(100vh - 12em)
@@ -273,6 +278,7 @@ body
         display: flex
         justify-content: center
         align-items: center
+        flex-direction: column
         cursor: pointer
         input
           position: absolute
@@ -292,6 +298,14 @@ body
             height: 1.5em
             width: 1.5em
             background: url('../images/radio-unchecked.svg')
+        span.note
+          margin-top: 0.5em
+          font-family: $mainFont
+          font-size: 1em
+          font-weight: 900
+          color: $gray100
+          letter-spacing: 0.125em
+          text-transform: uppercase
         & > input:checked + span.input-span
           box-shadow: inset 0 0 0 0.25em $gray100
           border-radius: 1em
@@ -321,6 +335,10 @@ body
             margin-top: 0.5em
             font-family: "Barlow", sans-serif
             font-size: 1.5em
+        &--inactive
+          background: $gray800
+          img
+            opacity: 0.5
     label.settings__checkbox-toggle
       position: relative
       margin-top: 1em
