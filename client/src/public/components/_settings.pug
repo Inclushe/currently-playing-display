@@ -16,7 +16,7 @@
           img(src="../images/spotify-logo.svg")
           span.note Tap to Reset
         label(for="lastfm").settings__radio-button.settings__radio-button--provider.settings__radio-button--inactive
-          input(type="radio" name="provider" value="lastfm" id="lastfm")
+          input(type="radio" name="provider" value="lastfm" id="lastfm" disabled="disabled")
           span.input-span Last.fm
           img(src="../images/lastfm-logo.svg")
           span.note Coming Soon?
@@ -24,19 +24,19 @@
       h2 Background
       .settings__radio
         label(for="albumart" style="background-image: url('../images/background-cover.svg')").settings__radio-button.settings__radio-button--background
-          input(type="radio" name="background" value="albumart" id="albumart" checked)
+          input(type="radio" name="background" v-model="settings.backgroundTypeIndex" v-bind:value="0" id="albumart" checked)
           span.input-span Album Art
           span.description Album Art
         label(for="gradient" style="background-image: url('../images/background-gradient.svg')").settings__radio-button.settings__radio-button--background
-          input(type="radio" name="background" value="gradient" id="gradient")
+          input(type="radio" name="background" v-model="settings.backgroundTypeIndex" v-bind:value="1" id="gradient")
           span.input-span Gradient
           span.description Gradient
         label(for="both" style="background-image: url('../images/background-both.svg')").settings__radio-button.settings__radio-button--background
-          input(type="radio" name="background" value="both" id="both")
+          input(type="radio" name="background" v-model="settings.backgroundTypeIndex" v-bind:value="2" id="both")
           span.input-span Both
           span.description Both
         label(for="solid" style="background-image: url('../images/background-solid.svg')").settings__radio-button.settings__radio-button--background
-          input(type="radio" name="background" value="solid" id="solid")
+          input(type="radio" name="background" v-model="settings.backgroundTypeIndex" v-bind:value="3" id="solid")
           span.input-span Solid Color
           span.description Solid Color
     section.settings__setting

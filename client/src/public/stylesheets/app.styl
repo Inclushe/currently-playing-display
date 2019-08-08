@@ -28,9 +28,8 @@ body
   opacity: 1
   &--gradient
     // Gradients are a bit too dull, so we improvise.
-    filter: blur(0.5em) brightness(0.9) saturate(4)
-    transform: scale(1.1)
-    // transition: opacity 500ms
+    filter: blur(0) brightness(0.9) saturate(4)
+    transform: translateZ(0) scale(1)
   &--opaque
     opacity: 0.5
 
@@ -44,8 +43,16 @@ body
     opacity: 0
     transform: translateZ(0) scale(1.2)
   &-leave-to
-    opacity: 1
+    opacity: 0
     transform: translateZ(0) scale(1.4)
+
+.background.background--gradient.gradient-transition
+  &-enter-active, &-leave-active
+    transition: opacity 2000ms ease-out 50ms, transform 2000ms ease-out 50ms
+  &-enter
+    opacity: 0 !important
+  &-leave-to
+    opacity: 0 !important
 
 .cover-transition
   &-enter-active, &-leave-active
@@ -191,6 +198,12 @@ body
   align-items: center
   box-shadow: 0 4em 8em rgba(0, 0, 0, 0.2),
               0 1em 2em rgba(0, 0, 0, 0.5)
+  cursor: pointer
+  transition: background 100ms
+  -webkit-user-select: none
+  user-select: none
+  &:hover
+    background: $gray800
   img
     height: 2em
   span
@@ -243,6 +256,12 @@ body
     background: $gray700
     display: flex
     align-items: center
+    cursor: pointer
+    transition: background 100ms
+    -webkit-user-select: none
+    user-select: none
+    &:hover
+      background: $gray600
     img
       width: 2.5em
     span
@@ -280,6 +299,8 @@ body
         align-items: center
         flex-direction: column
         cursor: pointer
+        -webkit-user-select: none
+        user-select: none
         input
           position: absolute
           clip-path: polygon(0 0)
@@ -336,9 +357,9 @@ body
             font-family: "Barlow", sans-serif
             font-size: 1.5em
         &--inactive
-          background: $gray800
-          img
-            opacity: 0.5
+          background: $gray900
+          cursor: not-allowed
+          opacity: 0.5
     label.settings__checkbox-toggle
       position: relative
       margin-top: 1em

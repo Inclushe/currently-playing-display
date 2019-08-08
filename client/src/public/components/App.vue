@@ -59,6 +59,7 @@ export default {
           if (app.thereWereNoErrorsAndTrackChanged(json)) {
             preloadAlbumArt(json)
               .then(app.populateDataWithTrackInfo(json))
+              .then(app.setGradient(json))
           } else if (json.error) {
             app.errorMessage = json
             app.state = 'error'
@@ -143,9 +144,10 @@ export default {
       // this.setGradient()
     },
 
-    setGradient (url) {
+    setGradient (json) {
+      if (isLocalTrack(json)) return
       return renderGradient({
-        imagePath: url,
+        imagePath: json.item.album.images[0].url,
         height: 100,
         width: 100
       }).then(imageURI => {
@@ -155,7 +157,7 @@ export default {
     },
 
     toggleBackground () {
-      this.settings.backgroundTypeIndex = (this.settings.backgroundTypeIndex + 1) % 3
+      this.settings.backgroundTypeIndex = (this.settings.backgroundTypeIndex + 1) % 4
     },
 
     toggleSettings () {
@@ -178,6 +180,9 @@ export default {
           break
         case 2:
           type = 'both'
+          break
+        case 3:
+          type = 'solid'
           break
       }
       return type

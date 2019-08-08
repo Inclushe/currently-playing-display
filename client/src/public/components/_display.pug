@@ -1,7 +1,7 @@
 .display(v-if="state === 'playing'")
   transition(name="cover-transition" :duration="4500")
-    .display__album-cover(v-if="!isLocalTrack && settings.useTransitions" :style="{'background-image': `url('${coverArtImageURI}')`}" @click="toggleBackground" :key="coverArtImageURI")
-  .display__album-cover(v-if="!isLocalTrack && !settings.useTransitions" :style="{'background-image': `url('${coverArtImageURI}')`}" @click="toggleBackground" :key="coverArtImageURI")
+    .display__album-cover(v-if="!isLocalTrack && settings.useTransitions" :style="{'background-image': `url('${coverArtImageURI}')`}" :key="coverArtImageURI")
+  .display__album-cover(v-if="!isLocalTrack && !settings.useTransitions" :style="{'background-image': `url('${coverArtImageURI}')`}" :key="coverArtImageURI")
   .display__info(v-if="settings.useTransitions" :class="{ 'display__info--local': isLocalTrack }")
     transition(name="info-transition" :duration="1500")
       h1(:key="title") {{ title }}
