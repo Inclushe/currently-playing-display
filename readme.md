@@ -38,32 +38,49 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
   - [X] Make gradient background
   - [X] Add Interval
   - [?] Add Settings (rudimentary for now, click album cover)
-    - [ ] Background Style
+    - [X] Background Style
       - [X] Gradient
       - [X] Cover Art Blurred
       - [X] Both
-      - [ ] None
+      - [X] None
   - [?] Animate Gradient
     - Could be better
   - [?] Fix give-me-a-gradient to make gradients more saturated
   - [X] Recreate Figma designs
-  - [ ] Animate Song Transitions
+  - [X] Animate Song Transitions
     - Mock in AE first
-  - [ ] Refresh token on expiration
-  - [ ] Eat Params
+  - [X] Refresh token on expiration
+  - [X] Eat Params
+  - [X] Fix Background on wide displays
+  - [X] Gradients are washed out in Chrome (fixed within give-me-a-gradient)
+  - [ ] Hide Setting Button
   - [ ] Settings
     - [ ] Implement
-      - [ ] Provider
-      - [ ] Background Type
-      - [ ] Animation Toggle
+      - [?] Provider
+      - [X] Background Type
+      - [X] Animation Toggle
+      - [ ] Album Curved Edges
       - [ ] Track Info
+        - [ ] Always show album title
+        - [ ] Hide Album Name According to below rules
+          - [ ] Track is from a single
+          - [ ] Album is self-titled
+          - [ ] Track shares the name of the album
+        - [ ] Always hide album title
+    - [ ] Auto Save
   - [ ] Add Last.FM as Option
     - [ ] Make input box that takes username on homepage
     - [ ] Add functionality to app
     - [ ] Get album covers from musicbrainz
 
+## Nice to haves
+
+- [ ] Parse Track Title dashes and parentheses as tags
+
 ## Bugs
 
-- [ ] EADDRINUSE???
+- [ ] Background transitions can get nasty
+- [ ] Gradients require CSS filter to saturate
+- [ ] Album image is loaded multiple times
 
 Remember to change all instances of "CHANGEME"
