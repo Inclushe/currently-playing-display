@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
-import Vue from 'vue'
-import App from '../src/public/components/App'
+require('jsdom-global')(``, { url: 'http://localhost/' })
+const Vue = require('vue')
+const App = require('../.temp/App.js').default
 const assert = require('assert')
 let vm, Constructor
 

@@ -1,10 +1,12 @@
+<template lang="pug">
+  include App.vue.pug
+</template>
+
 <script>
-import appPug from './App.vue.pug'
 import renderGradient from 'give-me-a-gradient'
 
 export default {
   props: ['mock'],
-  template: appPug,
   data () {
     return {
       message: 'Hello world from Vue!',
@@ -39,7 +41,7 @@ export default {
       'auth_provider'
     ])
     removeQueriesFromURL()
-    if (credentials.auth_provider === 'spotify') {
+    if (credentials && credentials.auth_provider === 'spotify') {
       this.spotify.access_token = credentials.access_token
       this.spotify.refresh_token = credentials.refresh_token
     }
@@ -218,16 +220,28 @@ function getQueriesFromURL () {
 }
 
 function saveCredentialsToLocalStorage (credentials) {
-  const keys = Object.keys(credentials)
-  keys.forEach(key => localStorage.setItem(key, credentials[key]))
+  try {
+    const keys = Object.keys(credentials)
+    keys.forEach(key => localStorage.setItem(key, credentials[key]))
+  } catch (e) {
+    return {
+      error: 'save_failed'
+    }
+  }
 }
 
 function getCredentialsFromLocalStorage (array) {
-  const credentials = {}
-  array.forEach(credential => {
-    credentials[credential] = localStorage.getItem(credential)
-  })
-  return credentials
+  try {
+    const credentials = {}
+    array.forEach(credential => {
+      credentials[credential] = localStorage.getItem(credential)
+    })
+    return credentials
+  } catch (e) {
+    return {
+      error: 'load_failed'
+    }
+  }
 }
 
 function removeQueriesFromURL () {
