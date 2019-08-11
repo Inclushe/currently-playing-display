@@ -17,9 +17,6 @@ exports.authorize = (request, response) => {
   Refresh tokens do not expire.
 */
 exports.callback = (request, response, next) => {
-  if (request.query.code === undefined) {
-    return response.redirect(`/?error=code_not_found`)
-  }
   postToSpotifyAPI('https://accounts.spotify.com/api/token', {
     grant_type: 'authorization_code',
     code: request.query.code
@@ -37,11 +34,6 @@ exports.callback = (request, response, next) => {
 
 // Refreshes the access token, given refresh_token as a query
 exports.refresh = (request, response, next) => {
-  if (request.query.refresh_token === undefined) {
-    return response.json({
-      error: 'refresh_token_not_found'
-    })
-  }
   postToSpotifyAPI('https://accounts.spotify.com/api/token', {
     grant_type: 'refresh_token',
     refresh_token: request.query.refresh_token
@@ -51,4 +43,22 @@ exports.refresh = (request, response, next) => {
       response.json(data)
     })
     .catch(next)
+}
+
+exports.checkForCode = (request, response, next) => {
+  if (request.query.code === undefined) {
+    return response.redirect(`/?error=code_not_found`)
+  } else {
+    next()
+  }
+}
+
+exports.checkForRefreshToken = (request, response, next) => {
+  if (request.query.refresh_token === undefined) {
+    return response.json({
+      error: 'refresh_token_not_found'
+    })
+  } else {
+    next()
+  }
 }

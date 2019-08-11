@@ -7,7 +7,13 @@ router.get('/status', (request, response) => {
 })
 
 router.get('/spotify/authorize', spotifyController.authorize)
-router.get('/spotify/callback', spotifyController.callback)
-router.get('/spotify/refresh', spotifyController.refresh)
+router.get('/spotify/callback',
+  spotifyController.checkForCode,
+  spotifyController.callback
+)
+router.get('/spotify/refresh',
+  spotifyController.checkForRefreshToken,
+  spotifyController.refresh
+)
 
 module.exports = router

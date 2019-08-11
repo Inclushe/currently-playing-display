@@ -7,14 +7,16 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
 
 ## Planned Support
 
-- [ ] Spotify (using web API)
+- [X] Spotify (using web API)
 - [ ] Last.fm (using musicbrainz for album covers as last.fm api ToS disallows image hotlinking)
 
-## Known Issues
+## Issues
 
-- [ ] Vue breaks when there is no album art (local files)
-- [ ] No message when nothing playing
-- [ ] Testing using postToSpotify doesn't work (find a different way to test vue templates)
+- [X] Vue breaks when there is no album art (local files)
+- [X] No message when nothing playing
+- [ ] Background transitions can get nasty
+- [ ] Gradients require CSS filter to saturate
+- [ ] Album image is loaded multiple times
 
 ## Timeline
 
@@ -76,11 +78,5 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
 ## Nice to haves
 
 - [ ] Parse Track Title dashes and parentheses as tags
-
-## Bugs
-
-- [ ] Background transitions can get nasty
-- [ ] Gradients require CSS filter to saturate
-- [ ] Album image is loaded multiple times
 
 Remember to change all instances of "CHANGEME"
