@@ -55,24 +55,29 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
   - [X] Eat Params
   - [X] Fix Background on wide displays
   - [X] Gradients are washed out in Chrome (fixed within give-me-a-gradient)
-  - [ ] Hide Setting Button
+  - [X] Hide Setting Button
   - [ ] Settings
     - [ ] Implement
       - [?] Provider
       - [X] Background Type
       - [X] Animation Toggle
-      - [ ] Album Curved Edges
-      - [ ] Track Info
-        - [ ] Always show album title
-        - [ ] Hide Album Name According to below rules
-          - [ ] Track is from a single
-          - [ ] Album is self-titled
-          - [ ] Track shares the name of the album
-        - [ ] Always hide album title
+      - [X] Album Curved Edges
+      - [X] Track Info
+        - [X] Make Radio Buttons like checkboxes
+        - [X] Always show album title
+        - [X] Hide Album Name According to below rules
+          - [X] Track is from a single
+          - [X] Album is self-titled
+          - [X] Track shares the name of the album
+        - [X] Always hide album title
     - [ ] Auto Save
+    - [ ] Make Settings Responsive
   - [ ] Add Last.FM as Option
     - [ ] Make input box that takes username on homepage
     - [ ] Add functionality to app
+      - [ ] Call Last.fm API
+      - [ ] Use MBID to get album art from coverartarchive.org
+      - [ ] Fill it in
     - [ ] Get album covers from musicbrainz
 
 ## Nice to haves

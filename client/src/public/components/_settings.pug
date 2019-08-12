@@ -40,11 +40,33 @@
           span.input-span Solid Color
           span.description Solid Color
     section.settings__setting
-      h2 Animations
+      h2 General
       label(for="trackTransitions").settings__checkbox-toggle
         input(type="checkbox" id="trackTransitions" v-model="settings.useTransitions")
-        span Animate Track Transitions
+        span Animate track transitions
+      label(for="albumArtCurvedEdges").settings__checkbox-toggle
+        input(type="checkbox" id="albumArtCurvedEdges" v-model="settings.albumArtCurvedEdges")
+        span Curve album art edges
     section.settings__setting
       h2 Track Info
+      label(for="always").settings__radio-button.settings__radio-button--inline
+        input(type="radio" name="albumTitle" v-model="settings.albumTitle.show" v-bind:value="'always'" id="always")
+        span Always show album title
+      label(for="sometimes").settings__radio-button.settings__radio-button--inline
+        input(type="radio" name="albumTitle" v-model="settings.albumTitle.show" v-bind:value="'sometimes'" id="sometimes")
+        span Hide album title if
+      .settings__indent
+        label(for="hideIfSingle").settings__checkbox-toggle
+          input(type="checkbox" id="hideIfSingle" v-model="settings.albumTitle.hideIfSingle" :disabled="settings.albumTitle.show !== 'sometimes'")
+          span Track is from a single
+        label(for="hideIfSelfTitled").settings__checkbox-toggle
+          input(type="checkbox" id="hideIfSelfTitled" v-model="settings.albumTitle.hideIfSelfTitled" :disabled="settings.albumTitle.show !== 'sometimes'")
+          span Track is from a self-titled album
+        label(for="hideIfTitleHasSameNameAsAlbum").settings__checkbox-toggle
+          input(type="checkbox" id="hideIfTitleHasSameNameAsAlbum" v-model="settings.albumTitle.hideIfTitleHasSameNameAsAlbum" :disabled="settings.albumTitle.show !== 'sometimes'")
+          span Track has the same name as the album
+      label(for="never").settings__radio-button.settings__radio-button--inline
+        input(type="radio" name="albumTitle" v-model="settings.albumTitle.show" v-bind:value="'never'" id="never")
+        span Always hide album title
     section.settings__setting
       h2 Reset

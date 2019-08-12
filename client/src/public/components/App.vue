@@ -27,7 +27,16 @@ export default {
       settings: {
         active: false,
         backgroundTypeIndex: 0,
-        useTransitions: true
+        useTransitions: true,
+        buttonVisible: true,
+        buttonTimeout: null,
+        albumArtCurvedEdges: false,
+        albumTitle: {
+          show: 'always',
+          hideIfSingle: true,
+          hideIfSelfTitled: true,
+          hideIfTitleHasSameNameAsAlbum: true
+        }
       },
       getCurrentlyPlayingTrackInterval: null
     }
@@ -47,6 +56,7 @@ export default {
     }
     this.getCurrentlyPlayingTrackInterval = setInterval(this.getCurrentlyPlayingTrack, 1000)
     this.getCurrentlyPlayingTrack()
+    this.timeout()
   },
   methods: {
     getCurrentlyPlayingTrack () {
@@ -62,11 +72,8 @@ export default {
             preloadAlbumArt(json)
               .then(app.populateDataWithTrackInfo(json))
               .then(app.setGradient(json))
-          } else if (json.error) {
-            app.errorMessage = json
-            app.state = 'error'
-          } else if (json.now_playing === false) {
-            app.state = 'waiting'
+          } else {
+            this.updateStatus(json)
           }
         })
         .catch(console.error)
@@ -158,6 +165,15 @@ export default {
       })
     },
 
+    updateStatus (json) {
+      if (json.error) {
+        this.errorMessage = json
+        this.state = 'error'
+      } else if (json.now_playing === false) {
+        this.state = 'waiting'
+      }
+    },
+
     toggleBackground () {
       this.settings.backgroundTypeIndex = (this.settings.backgroundTypeIndex + 1) % 4
     },
@@ -168,6 +184,14 @@ export default {
 
     reauthSpotify () {
       document.location = '/spotify/authorize'
+    },
+
+    timeout () {
+      clearTimeout(this.settings.buttonTimeout)
+      this.settings.buttonVisible = true
+      this.settings.buttonTimeout = setTimeout(() => {
+        this.settings.buttonVisible = false
+      }, 2000)
     }
   },
   computed: {
@@ -203,6 +227,28 @@ export default {
           break
       }
       return value
+    },
+    shouldShowAlbumTitle () {
+      let bool = true
+      switch (this.settings.albumTitle.show) {
+        case 'always':
+          bool = true
+          break
+        case 'sometimes':
+          const albumTypeIsSingle = this.spotify.current_track.item.album.album_type === 'single'
+          const isSelfTitled = new RegExp(`^${this.album}`).test(this.artists)
+          const titleSharesNameWithAlbum = new RegExp(`^${this.album}`).test(this.title)
+          if ((albumTypeIsSingle && this.settings.albumTitle.hideIfSingle) ||
+              (isSelfTitled && this.settings.albumTitle.hideIfSelfTitled) ||
+              (titleSharesNameWithAlbum && this.settings.albumTitle.hideIfTitleHasSameNameAsAlbum)) {
+            bool = false
+          }
+          break
+        case 'never':
+          bool = false
+          break
+      }
+      return bool
     }
   }
 }

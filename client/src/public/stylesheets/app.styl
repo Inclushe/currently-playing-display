@@ -84,13 +84,14 @@ body
     background: black
     grid-row: 3 / 11
     grid-column: 1 / 9
-    border-radius: 1em
     background-size: cover
     background-position: center
     background-repeat: no-repeat
     box-shadow: 0 4em 8em rgba(0, 0, 0, 0.2),
                 0 1em 2em rgba(0, 0, 0, 0.5),
                 inset 0 0 0.5em rgba(0, 0, 0, 0.5)
+    &--curved
+      border-radius: 1em
   &__info
     grid-row: 3 / 11
     grid-column: 11 / -1
@@ -201,9 +202,12 @@ body
   box-shadow: 0 4em 8em rgba(0, 0, 0, 0.2),
               0 1em 2em rgba(0, 0, 0, 0.5)
   cursor: pointer
-  transition: background 100ms
+  transition: background 100ms, transform 200ms ease-in-out
   -webkit-user-select: none
   user-select: none
+  transform: translateY(6em)
+  &--visible
+    transform: translateY(0)
   &:hover
     background: $gray800
   img
@@ -364,6 +368,7 @@ body
           opacity: 0.5
     label.settings__checkbox-toggle
       position: relative
+      display: block
       margin-top: 1em
       input
         clip-path: polygon(0 0)
@@ -384,3 +389,30 @@ body
           background-image: url('../images/checkbox-unchecked.svg')
       & > input:checked + span::after
         background-image: url('../images/checkbox-checked.svg')
+      & > input[disabled="disabled"] + span
+        opacity: 0.25
+    label.settings__radio-button.settings__radio-button--inline
+      position: relative
+      display: block
+      margin-top: 1em
+      input
+        clip-path: polygon(0 0)
+      span
+        cursor: pointer
+        margin-left: 1.5rem
+        font-family: "Barlow", sans-serif
+        font-size: 1.5em
+        vertical-align: sub
+        &::after
+          content: ''
+          display: block
+          position: absolute
+          top: 0
+          left: 0.5rem
+          height: 1.5rem
+          width: 1.5rem
+          background-image: url('../images/radio-unchecked.svg')
+      & > input:checked + span::after
+        background-image: url('../images/radio-checked.svg')
+    .settings__indent
+      margin-left: 2em
