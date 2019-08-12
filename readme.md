@@ -17,6 +17,7 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
 - [ ] Background transitions can get nasty
 - [ ] Gradients require CSS filter to saturate
 - [ ] Album image is loaded multiple times
+- [ ] Album image blinks on load even though we wait for it to load
 
 ## Timeline
 
@@ -70,8 +71,11 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
           - [X] Album is self-titled
           - [X] Track shares the name of the album
         - [X] Always hide album title
-    - [ ] Auto Save
-    - [ ] Make Settings Responsive
+    - [X] Auto Save
+    - [?] Make Settings Responsive
+    - [?] Hide cursor when settings is hiden
+    - [ ] Add Reset Button
+    - [ ] Add Credits
   - [ ] Add Last.FM as Option
     - [ ] Make input box that takes username on homepage
     - [ ] Add functionality to app

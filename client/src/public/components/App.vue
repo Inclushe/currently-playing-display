@@ -24,15 +24,15 @@ export default {
       state: 'loading',
       error: false,
       errorMessage: null,
+      buttonVisible: true,
+      buttonTimeout: null,
       settings: {
         active: false,
-        backgroundTypeIndex: 0,
+        backgroundTypeIndex: 2,
         useTransitions: true,
-        buttonVisible: true,
-        buttonTimeout: null,
-        albumArtCurvedEdges: false,
+        albumArtCurvedEdges: true,
         albumTitle: {
-          show: 'always',
+          show: 'sometimes',
           hideIfSingle: true,
           hideIfSelfTitled: true,
           hideIfTitleHasSameNameAsAlbum: true
@@ -54,6 +54,7 @@ export default {
       this.spotify.access_token = credentials.access_token
       this.spotify.refresh_token = credentials.refresh_token
     }
+    this.loadSettings()
     this.getCurrentlyPlayingTrackInterval = setInterval(this.getCurrentlyPlayingTrack, 1000)
     this.getCurrentlyPlayingTrack()
     this.timeout()
@@ -187,11 +188,22 @@ export default {
     },
 
     timeout () {
-      clearTimeout(this.settings.buttonTimeout)
-      this.settings.buttonVisible = true
-      this.settings.buttonTimeout = setTimeout(() => {
-        this.settings.buttonVisible = false
+      clearTimeout(this.buttonTimeout)
+      this.buttonVisible = true
+      this.buttonTimeout = setTimeout(() => {
+        this.buttonVisible = false
       }, 2000)
+    },
+
+    saveSettings () {
+      saveCredentialsToLocalStorage({ settings: JSON.stringify(this.settings) })
+    },
+
+    loadSettings () {
+      const credentials = getCredentialsFromLocalStorage(['settings'])
+      if (credentials && credentials.settings) {
+        this.settings = JSON.parse(credentials.settings)
+      }
     }
   },
   computed: {
@@ -249,6 +261,15 @@ export default {
           break
       }
       return bool
+    }
+  },
+  watch: {
+    settings: {
+      handler () {
+        console.log('saved')
+        this.saveSettings()
+      },
+      deep: true
     }
   }
 }
