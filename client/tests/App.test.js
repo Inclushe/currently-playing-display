@@ -15,7 +15,7 @@ before(() => {
 })
 
 describe('App', function () {
-  it('mounts', () => {
+  it('mounted', () => {
     assert.strictEqual(vm.$el.querySelector('h1').textContent, 'Mock Title')
   })
 
@@ -30,4 +30,9 @@ describe('App', function () {
   it('has getCurrentlyPlayingTrack', () => {
     assert(typeof App.methods.getCurrentlyPlayingTrack === 'function')
   })
+})
+
+after(() => {
+  // Stop interval so that the tests can stop
+  clearInterval(vm.$data.getCurrentlyPlayingTrackInterval)
 })

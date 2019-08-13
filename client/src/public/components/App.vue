@@ -204,6 +204,14 @@ export default {
       if (credentials && credentials.settings) {
         this.settings = JSON.parse(credentials.settings)
       }
+    },
+
+    getAlbumType () {
+      if ('item' in this.spotify.current_track) {
+        return this.spotify.current_track.item.album.album_type
+      } else {
+        return false
+      }
     }
   },
   computed: {
@@ -247,7 +255,7 @@ export default {
           bool = true
           break
         case 'sometimes':
-          const albumTypeIsSingle = this.spotify.current_track.item.album.album_type === 'single'
+          const albumTypeIsSingle = this.getAlbumType() === 'single'
           const isSelfTitled = new RegExp(`^${this.album}`).test(this.artists)
           const titleSharesNameWithAlbum = new RegExp(`^${this.album}`).test(this.title)
           if ((albumTypeIsSingle && this.settings.albumTitle.hideIfSingle) ||
