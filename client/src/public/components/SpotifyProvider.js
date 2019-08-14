@@ -12,13 +12,25 @@ module.exports = class SpotifyProvider {
   getCurrentTrack () {
     return new Promise((resolve, reject) => {
       this._fetchCurrentlyPlayingTrackFromSpotifyAPI()
-        .then(this._refreshAccessTokenIfNeeded.bind(this)) // JavaScript is a good language
-        .then(this._handleRequestErrors)
+        .then(request => this._refreshAccessTokenIfNeeded(request))
+        .then(request => this._handleRequestErrors(request))
         .then(data => data.json())
         .then(json => {
           resolve(json)
         })
-        .catch(reject)
+        .catch(error => reject(error))
+    })
+  }
+
+  refresh () {
+    return new Promise((resolve, reject) => {
+      window.fetch(`/spotify/refresh?refresh_token=${self.refreshToken}`)
+        .then(data => data.json())
+        .then(json => {
+          this.accessToken = json.access_token
+          resolve(this._fetchCurrentlyPlayingTrackFromSpotifyAPI())
+        })
+        .catch(error => reject(error))
     })
   }
 
@@ -34,18 +46,10 @@ module.exports = class SpotifyProvider {
 
   _refreshAccessTokenIfNeeded (data) {
     console.log(this)
+    console.log(data)
     const ACCESS_TOKEN_EXPIRED = 401
     if (data.status === ACCESS_TOKEN_EXPIRED) {
-      let self = this
-      return new Promise((resolve, reject) => {
-        window.fetch(`/spotify/refresh?refresh_token=${self.refreshToken}`)
-          .then(data => data.json())
-          .then(json => {
-            this.accessToken = json.access_token
-            resolve(this._fetchCurrentlyPlayingTrackFromSpotifyAPI())
-          })
-          .catch(reject)
-      })
+      this.refresh()
     } else {
       return data
     }
