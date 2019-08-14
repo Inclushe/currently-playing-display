@@ -6,6 +6,9 @@ function find (regex) {
   })
 }
 
+let localNetworkObject = networkInterfaces[find(/^lo/)]
+let remoteNetworkObject = networkInterfaces[find(/^eth/)] || networkInterfaces[find(/^wl/)] || [{ address: 'not-found' }]
+
 exports.test = 'OK'
-exports.local = networkInterfaces[find(/^lo/)][0].address
-exports.remote = networkInterfaces[find(/^eth/)][0].address
+exports.local = localNetworkObject[0].address
+exports.remote = remoteNetworkObject[0].address
