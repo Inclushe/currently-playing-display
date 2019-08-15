@@ -78,11 +78,18 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
     - [ ] Add Credits
   - [ ] Add Last.FM as Option
     - [ ] Separate into providers
-      - authenticate
-      - getCurrentTrack
-      - getAlbumArt
-      - refreshToken (only for spotify)
-      - handleGetCurrentTrackErrors
+      - [ ] Spotify
+        - [ ] authenticate
+        - [ ] getCurrentTrack
+        - [ ] getAlbumArt
+        - [ ] refreshToken (only for spotify)
+        - [ ] handleGetCurrentTrackErrors
+      - [ ] Last.fm
+        - [ ] authenticate
+        - [ ] getCurrentTrack
+        - [ ] getAlbumArt
+        - [ ] refreshToken (only for spotify)
+        - [ ] handleGetCurrentTrackErrors
     - [ ] Make input box that takes username on homepage
     - [ ] Add functionality to app
       - [ ] Call Last.fm API

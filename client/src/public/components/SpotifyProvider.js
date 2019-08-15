@@ -10,16 +10,14 @@ module.exports = class SpotifyProvider {
   }
 
   getCurrentTrack () {
-    return new Promise((resolve, reject) => {
-      this._fetchCurrentlyPlayingTrackFromSpotifyAPI()
-        .then(request => this._refreshAccessTokenIfNeeded(request))
-        .then(request => this._handleRequestErrors(request))
-        .then(data => data.json())
-        .then(json => {
-          resolve(json)
-        })
-        .catch(error => reject(error))
-    })
+    return this._fetchCurrentlyPlayingTrackFromSpotifyAPI()
+      .then(request => this._refreshAccessTokenIfNeeded(request))
+      .then(request => this._handleRequestErrors(request))
+      .then(data => data.json())
+      .then(json => {
+        // extract track info or return object with info
+        return json
+      })
   }
 
   refresh () {
