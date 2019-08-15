@@ -73,13 +73,13 @@ https://accounts.spotify.com/authorize?client_id=1130bb87f6ea402e98afed27aee886c
         - [X] Always hide album title
     - [X] Auto Save
     - [?] Make Settings Responsive
-    - [?] Hide cursor when settings is hiden
+    - [?] Hide cursor when settings is hidden
     - [ ] Add Reset Button
     - [ ] Add Credits
   - [ ] Add Last.FM as Option
     - [ ] Separate into providers
       - [ ] Spotify
-        - [ ] authenticate
+        - [X] authenticate
         - [ ] getCurrentTrack
         - [ ] getAlbumArt
         - [ ] refreshToken (only for spotify)
