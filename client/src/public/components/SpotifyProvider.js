@@ -1,4 +1,5 @@
-const mockedAPIRequest = require('../../../tests/mocks').exampleCurrentlyPlayingResponse
+const mockedAPIRequest = require('../../../tests/mocks').spotifyExampleCurrentlyPlayingResponse
+const mockFetchReturningJSON = require('./mockFetchReturningJSON')
 const Track = require('./Track')
 
 module.exports = class SpotifyProvider {
@@ -41,7 +42,7 @@ module.exports = class SpotifyProvider {
       .catch(error => reject(error))
   }
 
-  _fetchCurrentlyPlayingTrackFromSpotifyAPI (data) {
+  _fetchCurrentlyPlayingTrackFromSpotifyAPI () {
     if (this.mock) {
       return mockFetchReturningJSON(mockedAPIRequest, this.mock.status)
     }
@@ -87,22 +88,11 @@ module.exports = class SpotifyProvider {
       this.track.id = json.item.id
     }
     if (isLocalTrack) {
-      this.track.coverArtURI = null
+      this.track.coverArtURL = null
     } else {
-      this.coverArtImageURI = json.item.album.images[0].url
+      this.track.coverArtURL = json.item.album.images[0].url
     }
   }
-}
-
-function mockFetchReturningJSON (object, status) {
-  return new Promise((resolve, reject) => {
-    resolve({
-      status: status,
-      json () {
-        return object
-      }
-    })
-  })
 }
 
 function getSpotifyArtistsString (json) {

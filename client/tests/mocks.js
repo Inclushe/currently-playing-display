@@ -1,6 +1,6 @@
 /* eslint-disable quote-props */
 /* eslint-disable quotes */
-exports.exampleCurrentlyPlayingResponse = {
+exports.spotifyExampleCurrentlyPlayingResponse = {
   "timestamp": 1563218531272,
   "context": {
     "external_urls": {
@@ -255,4 +255,89 @@ exports.exampleCurrentlyPlayingResponse = {
     }
   },
   "is_playing": true
+}
+
+exports.lastFmExampleCurrentlyPlayingResponse = {
+  "recenttracks": {
+    "@attr": {
+      "page": "1",
+      "total": "35012",
+      "user": "inclushe",
+      "perPage": "1",
+      "totalPages": "35012"
+    },
+    "track": [
+      {
+        "artist": {
+          "mbid": "",
+          "#text": "Lorn"
+        },
+        "@attr": {
+          "nowplaying": "true"
+        },
+        "mbid": "01794756-3639-4b8c-b1ef-4398d75420b4",
+        "album": {
+          "mbid": "87caa8f4-cdde-42fb-bd75-a0410a25c5f1",
+          "#text": "THE MAZE TO NOWHERE"
+        },
+        "streamable": "0",
+        "url": "https://www.last.fm/music/Lorn/_/OXBOW+B",
+        "name": "OXBOW B",
+        "image": [
+          {
+            "size": "small",
+            "#text": "https://lastfm-img2.akamaized.net/i/u/34s/35fa26882f2240b6c02469a127ab3971.jpg"
+          },
+          {
+            "size": "medium",
+            "#text": "https://lastfm-img2.akamaized.net/i/u/64s/35fa26882f2240b6c02469a127ab3971.jpg"
+          },
+          {
+            "size": "large",
+            "#text": "https://lastfm-img2.akamaized.net/i/u/174s/35fa26882f2240b6c02469a127ab3971.jpg"
+          },
+          {
+            "size": "extralarge",
+            "#text": "https://lastfm-img2.akamaized.net/i/u/300x300/35fa26882f2240b6c02469a127ab3971.jpg"
+          }
+        ]
+      },
+      {
+        "artist": {
+          "mbid": "d4caad3c-c5c4-44a4-b90c-900650965ba8",
+          "#text": "Calvin Harris"
+        },
+        "album": {
+          "mbid": "04dc6e8b-ce15-4d22-b8ac-d52b09029459",
+          "#text": "18 Months"
+        },
+        "image": [
+          {
+            "size": "small",
+            "#text": "https://lastfm-img2.akamaized.net/i/u/34s/38a2d0c803cb46c1b99bc66babdb216f.png"
+          },
+          {
+            "size": "medium",
+            "#text": "https://lastfm-img2.akamaized.net/i/u/64s/38a2d0c803cb46c1b99bc66babdb216f.png"
+          },
+          {
+            "size": "large",
+            "#text": "https://lastfm-img2.akamaized.net/i/u/174s/38a2d0c803cb46c1b99bc66babdb216f.png"
+          },
+          {
+            "size": "extralarge",
+            "#text": "https://lastfm-img2.akamaized.net/i/u/300x300/38a2d0c803cb46c1b99bc66babdb216f.png"
+          }
+        ],
+        "streamable": "0",
+        "date": {
+          "uts": "1566267935",
+          "#text": "20 Aug 2019, 02:25"
+        },
+        "url": "https://www.last.fm/music/Calvin+Harris/_/Thinking+About+You+(feat.+Ayah+Marar)",
+        "name": "Thinking About You (feat. Ayah Marar)",
+        "mbid": "260ec287-6cbb-497f-aa3c-edaeec36135a"
+      }
+    ]
+  }
 }

@@ -88,4 +88,20 @@ describe('SpotifyProvider', function () {
         assert(/^local/.test(provider.track.id))
       })
   })
+
+  it('should fill all entries in Track', () => {
+    const provider = new SpotifyProvider({
+      mock: true
+    })
+    return provider.updateTrack()
+      .then(() => {
+        let thereIsNoNullEntry = true
+        for (entry in provider.track) {
+          if (provider.track[entry] === null) {
+            thereIsNoNullEntry = false
+          }
+        }
+        assert(thereIsNoNullEntry)
+      })
+  })
 })
