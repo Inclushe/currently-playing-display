@@ -341,3 +341,25 @@ exports.lastFmExampleCurrentlyPlayingResponse = {
     ]
   }
 }
+
+exports.musicbrainzExampleAPIRequest = {
+  "release": "https://musicbrainz.org/release/05c617c7-7512-4a0b-9c4e-a3fcc2bf5c03",
+  "images": [
+    {
+      "back": false,
+      "thumbnails": {
+        "large": "http://coverartarchive.org/release/05c617c7-7512-4a0b-9c4e-a3fcc2bf5c03/7456741432-500.jpg",
+        "small": "http://coverartarchive.org/release/05c617c7-7512-4a0b-9c4e-a3fcc2bf5c03/7456741432-250.jpg"
+      },
+      "image": "http://coverartarchive.org/release/05c617c7-7512-4a0b-9c4e-a3fcc2bf5c03/7456741432.jpg",
+      "edit": 28015713,
+      "id": "7456741432",
+      "front": true,
+      "approved": true,
+      "types": [
+        "Front"
+      ],
+      "comment": ""
+    }
+  ]
+}

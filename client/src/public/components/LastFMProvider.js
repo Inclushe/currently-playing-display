@@ -1,4 +1,5 @@
-const mockedAPIRequest = require('../../../tests/mocks').lastFmExampleCurrentlyPlayingResponse
+const mockedLastFMAPIRequest = require('../../../tests/mocks').lastFmExampleCurrentlyPlayingResponse
+const mockedMusicbrainzAPIRequest = require('../../../tests/mocks').musicbrainzExampleAPIRequest
 const mockFetchReturningJSON = require('./mockFetchReturningJSON')
 const Track = require('./Track')
 
@@ -17,6 +18,7 @@ module.exports = class LastFMProvider {
         if (json.error) throw new Error(json.message)
         this._setTrackUsingRequest(json)
       })
+      .then(_ => this._setTrackAlbumArtUsingMusicbrainzID())
   }
 
   authenticate () {
@@ -29,7 +31,7 @@ module.exports = class LastFMProvider {
 
   _fetchCurrentlyPlayingSongFromLastFMAPI () {
     if (this.mock) {
-      return mockFetchReturningJSON(mockedAPIRequest)
+      return mockFetchReturningJSON(mockedLastFMAPIRequest)
     }
     return window.fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${this.user}&api_key=${this.APIKey}&limit=1&format=json`)
   }
@@ -42,8 +44,25 @@ module.exports = class LastFMProvider {
       this.track.album = json.album['#text']
       this.track.artists = json.artist['#text'] // Only gets the first artist
       this.track.id = json.mbid // may return an empty string
-      // @TODO: fetch to musicbrainz api to get image url
-      this.track.coverArtURL = `https://coverartarchive.org/release/${json.mbid}`
     }
+  }
+
+  _setTrackAlbumArtUsingMusicbrainzID () {
+    // The last.fm API gives two mbids, one for the track and one for the album.
+    // The album is more likely to have album art
+    return this._fetchAlbumArtFromMusicbrainzAPI()
+      .then(data => data.json())
+      .then(json => {
+        this.track.coverArtURL = json.images[0].thumbnails.large
+      })
+  }
+
+  _fetchAlbumArtFromMusicbrainzAPI () {
+    if (this.mock) {
+      return mockFetchReturningJSON(mockedMusicbrainzAPIRequest)
+    }
+    const mbid = this.track._json.album.mbid
+    const mbidAlbumArtAPI = `https://coverartarchive.org/release/${mbid}`
+    return window.fetch(mbidAlbumArtAPI)
   }
 }

@@ -27,7 +27,7 @@
     - [X] Test success
     - [X] Test failure
   - [X] Refactor
-  - [X] Decide how it should be returned to the client
+  - [X] Decide how it should be5 returned to the client
 - [ ] Client
   - [X] Barebones client fetch from Spotify
   - [X] Recreate design from Figma
@@ -73,20 +73,20 @@
     - [?] Hide cursor when settings is hidden
     - [ ] Add Reset Button
     - [ ] Add Credits
-  - [ ] Add Last.FM as Option
-    - [ ] Separate into providers
-      - [ ] Spotify
+  - [X] Add Last.FM as Option
+    - [X] Separate into providers
+      - [X] Spotify
         - [X] authenticate
-        - [ ] getCurrentTrack
-        - [ ] getAlbumArt
-        - [ ] refreshToken (only for spotify)
-        - [ ] handleGetCurrentTrackErrors
-      - [ ] Last.fm
-        - [ ] authenticate
-        - [ ] getCurrentTrack
-        - [ ] getAlbumArt
-        - [ ] refreshToken (only for spotify)
-        - [ ] handleGetCurrentTrackErrors
+        - [X] getCurrentTrack
+        - [X] getAlbumArt
+        - [X] refreshToken (only for spotify)
+        - [X] handleGetCurrentTrackErrors
+      - [X] Last.fm
+        - [X] authenticate
+        - [X] getCurrentTrack
+        - [X] getAlbumArt
+    - [ ] Fix track transitions in Firefox
+      - Painting takes a long time for some reason
     - [ ] Make input box that takes username on homepage
     - [ ] Add functionality to app
       - [ ] Call Last.fm API
