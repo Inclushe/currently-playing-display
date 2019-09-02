@@ -1,6 +1,6 @@
-transition(v-if="!isLocalTrack && settings.useTransitions && (backgroundType === 'cover-art' || backgroundType === 'both')" name="bg-transition" :duration="4500")
+transition(v-if="!isLocalTrack && settings.useTransitions && (backgroundType === 'cover-art' || backgroundType === 'both')" name="bg-transition" :duration="4300")
   .background(:style="{'background-image': `url('${coverArtImageURI}')` }" :key="coverArtImageURI")
-transition(v-if="settings.useTransitions && (backgroundType === 'gradient' || backgroundType === 'both')" name="gradient-transition" :duration="4500")
+transition(v-if="settings.useTransitions && (backgroundType === 'gradient' || backgroundType === 'both')" name="gradient-transition" :duration="4300")
   .background.background--gradient(:style="{'background-image': `url('${gradientImageURI}')`, 'opacity': gradientOpacity}" :key="gradientImageURI")
 .background(v-if="!settings.useTransitions && !isLocalTrack && (backgroundType === 'cover-art' || backgroundType === 'both')" :style="{'background-image': `url('${coverArtImageURI}')` }")
 .background.background--gradient(v-if="!settings.useTransitions && (backgroundType === 'gradient' || backgroundType === 'both' )" :style="{'background-image': `url('${gradientImageURI}')`, 'opacity': gradientOpacity}")
