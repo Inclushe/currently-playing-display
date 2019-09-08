@@ -6,5 +6,6 @@ module.exports = class CurrentTrack {
     this.id = null
     this.coverArtURL = null
     this._json = null
+    this.isLocal = null
   }
 }

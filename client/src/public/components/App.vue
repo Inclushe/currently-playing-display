@@ -4,6 +4,8 @@
 
 <script>
 import renderGradient from 'give-me-a-gradient'
+const SpotifyProvider = require('./SpotifyProvider')
+const LastFMProvider = require('./LastFMProvider')
 
 export default {
   props: ['mock'],
@@ -15,6 +17,8 @@ export default {
         refresh_token: '',
         current_track: {}
       },
+      provider: null,
+      lastTrackID: null,
       title: 'Sample Song Title',
       album: 'Sample Album Title',
       artists: 'Sample Artist 1, Sample Artist 2',
@@ -47,15 +51,23 @@ export default {
     const credentials = getCredentialsFromLocalStorage([
       'access_token',
       'refresh_token',
-      'auth_provider'
+      'auth_provider',
+      'key',
+      'username'
     ])
     removeQueriesFromURL()
     if (credentials && credentials.auth_provider === 'spotify') {
-      this.spotify.access_token = credentials.access_token
-      this.spotify.refresh_token = credentials.refresh_token
+      this.provider = new SpotifyProvider({
+        accessToken: credentials.access_token,
+        refreshToken: credentials.refresh_token
+      })
+    } else if (credentials && credentials.auth_provider === 'lastfm') {
+      this.provider = new LastFMProvider({
+        APIKey: credentials.key,
+        user: credentials.username
+      })
     }
     this.loadSettings()
-    this.getCurrentlyPlayingTrackInterval = setInterval(this.getCurrentlyPlayingTrack, 1000)
     this.getCurrentlyPlayingTrack()
     this.timeout()
   },
@@ -64,18 +76,17 @@ export default {
       const app = this
       if (app.mock === true) return this.handleGetCurrentlyPlayingTrackMock()
 
-      app.fetchCurrentlyPlayingTrack()
-        .then(app.refreshAccessTokenIfNeeded)
-        .then(app.handleRequestErrors)
-        .then(data => data.json())
-        .then(json => {
-          if (app.thereWereNoErrorsAndTrackChanged(json)) {
+      app.provider.updateTrack()
+        .then(() => {
+          let json = app.provider.track
+          if (app.trackChanged(json)) {
             preloadAlbumArt(json)
               .then(app.populateDataWithTrackInfo(json))
               .then(app.setGradient(json))
           } else {
             this.updateStatus(json)
           }
+          setTimeout(app.getCurrentlyPlayingTrack, 2000)
         })
         .catch(console.error)
     },
@@ -127,29 +138,25 @@ export default {
       }
     },
 
-    thereWereNoErrorsAndTrackChanged (data) {
-      const thereWereNoErrors = (!data.error && data.now_playing === undefined && data.item !== null)
-      const trackChanged = data.item !== null && data.item !== undefined && ((data.now_playing === undefined) && (this.spotify.current_track.item === undefined || (data.item !== null && ((this.spotify.current_track.item.id !== data.item.id) || data.item.id === null))))
-      const stateIsNotPlaying = this.state !== 'playing'
-
-      return (thereWereNoErrors && (trackChanged || stateIsNotPlaying))
+    trackChanged (data) {
+      return (data.id !== this.lastTrackID)
     },
 
     populateDataWithTrackInfo (data) {
-      const isLocal = data.item.is_local || false
+      const isLocal = data.isLocal || false
       if (isLocal) {
         this.isLocalTrack = true
       } else {
         this.isLocalTrack = false
-        this.coverArtImageURI = data.item.album.images[0].url
+        this.coverArtImageURI = data.coverArtURL
       }
-      this.spotify.current_track = data
+      this.lastTrackID = data.id
       this.state = 'playing'
-      this.title = data.item.name
-      this.album = data.item.album.name
-      this.artists = data.item.artists.reduce((r, v) => { r.push(v.name); return r }, []).join(', ')
+      this.title = data.title
+      this.album = data.album
+      this.artists = data.artists
       if (!isLocal) {
-        this.coverArtImageURI = data.item.album.images[0].url
+        this.coverArtImageURI = data.coverArtURL
       }
       // this.setGradient()
     },
@@ -157,7 +164,7 @@ export default {
     setGradient (json) {
       if (isLocalTrack(json)) return
       return renderGradient({
-        imagePath: json.item.album.images[0].url,
+        imagePath: json.coverArtURL,
         height: 100,
         width: 100
       }).then(imageURI => {
@@ -335,15 +342,15 @@ function mockFetchReturningJSON (object) {
 
 function preloadAlbumArt (json) {
   return new Promise((resolve, reject) => {
-    if (isLocalTrack(json)) { resolve() }
+    if (isLocalTrack(json) || json.coverArtURL === null) { resolve() }
     const image = new Image()
-    image.src = json.item.album.images[0].url
+    image.src = json.coverArtURL
     image.onload = resolve
     image.onerror = reject
   })
 }
 
 function isLocalTrack (json) {
-  return json.item.is_local || false
+  return json.isLocal || false
 }
 </script>

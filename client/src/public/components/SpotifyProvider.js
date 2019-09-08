@@ -6,7 +6,7 @@ module.exports = class SpotifyProvider {
   constructor (data = {}) {
     this.accessToken = data.accessToken
     this.refreshToken = data.refreshToken
-    this.mock = data.mock
+    this.mock = data.mock || null
     this.track = new Track()
   }
 
@@ -82,15 +82,17 @@ module.exports = class SpotifyProvider {
     this.track.album = json.item.album.name
     this.track.artists = getSpotifyArtistsString(json)
     const isLocalTrack = json.item.is_local
-    if (isLocalTrack || this.mock.isLocalTrack) {
+    if (isLocalTrack || (this.mock && this.mock.isLocalTrack)) {
       this.track.id = generateLocalID()
     } else {
       this.track.id = json.item.id
     }
     if (isLocalTrack) {
       this.track.coverArtURL = null
+      this.track.isLocal = true
     } else {
       this.track.coverArtURL = json.item.album.images[0].url
+      this.track.isLocal = false
     }
   }
 }

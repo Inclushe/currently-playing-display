@@ -44,6 +44,7 @@ module.exports = class LastFMProvider {
       this.track.album = json.album['#text']
       this.track.artists = json.artist['#text'] // Only gets the first artist
       this.track.id = json.mbid // may return an empty string
+      this.track.isLocal = false
     }
   }
 
@@ -54,6 +55,9 @@ module.exports = class LastFMProvider {
       .then(data => data.json())
       .then(json => {
         this.track.coverArtURL = json.images[0].thumbnails.large
+      })
+      .catch(() => {
+        this.track.coverArtURL = null
       })
   }
 
