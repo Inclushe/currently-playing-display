@@ -7,5 +7,6 @@ module.exports = class CurrentTrack {
     this.coverArtURL = null
     this._json = null
     this.isLocal = null
+    this.isCurrentlyPlaying = null
   }
 }

@@ -1,10 +1,10 @@
 const mockedLastFMAPIRequest = require('../../../tests/mocks').lastFmExampleCurrentlyPlayingResponse
-const mockedMusicbrainzAPIRequest = require('../../../tests/mocks').musicbrainzExampleAPIRequest
 const mockFetchReturningJSON = require('./mockFetchReturningJSON')
 const Track = require('./Track')
 
 module.exports = class LastFMProvider {
   constructor (data = {}) {
+    this.type = 'lastfm'
     this.APIKey = data.APIKey
     this.user = data.user
     this.mock = data.mock
@@ -42,9 +42,12 @@ module.exports = class LastFMProvider {
       this.track.title = json.name
       this.track.album = json.album['#text']
       this.track.artists = json.artist['#text'] // Only gets the first artist
-      this.track.id = json.mbid // may return an empty string
+      this.track.id = json.url // url is more reliable than mbid
       this.track.coverArtURL = json.image[json.image.length - 1]['#text']
       this.track.isLocal = false
+      this.track.isCurrentlyPlaying = true
+    } else {
+      this.track.isCurrentlyPlaying = false
     }
   }
 }

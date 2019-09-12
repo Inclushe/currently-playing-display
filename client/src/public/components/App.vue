@@ -177,7 +177,7 @@ export default {
       if (json.error) {
         this.errorMessage = json
         this.state = 'error'
-      } else if (json.now_playing === false) {
+      } else if (json.isCurrentlyPlaying === false) {
         this.state = 'waiting'
       }
     },

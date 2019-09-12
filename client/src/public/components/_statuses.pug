@@ -1,9 +1,13 @@
-.status-view(v-else-if="state === 'waiting'")
+.status-view(v-else-if="state === 'waiting' && provider.type === 'spotify'")
   h1 Nothing Playing
   p.
     Play a song on Spotify and it will show up here.
   p.
     Make sure your device is online with Private Listening turned off.
+.status-view(v-else-if="state === 'waiting' && provider.type === 'lastfm'")
+  h1 Nothing Playing
+  p.
+    Play a song on a music player that supports Last.fm scrobbling and it will show up here.
 .status-view(v-else-if="state === 'error'")
   h1 Error
   p This can usually be resolved by re-authenticating.

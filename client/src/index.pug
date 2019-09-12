@@ -16,8 +16,11 @@ html(lang="en")
         section.text
           h2 Show the info of the song you're playing on this screen.
           h3 Connect with
-          a.button(href="/spotify/authorize")
-            img(src="/public/images/spotify-logo.svg")
+          div.button-container
+            a.button(href="/spotify/authorize").button--spotify
+              img(src="/public/images/spotify-logo.svg")
+            a.button(href="/app?user=inclushe&auth_provider=lastfm").button--lastfm
+              img(src="/public/images/lastfm-logo.svg")
           h3 or watch the demo
           footer
             p.

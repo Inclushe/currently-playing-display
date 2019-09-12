@@ -4,6 +4,7 @@ const Track = require('./Track')
 
 module.exports = class SpotifyProvider {
   constructor (data = {}) {
+    this.type = 'spotify'
     this.accessToken = data.accessToken
     this.refreshToken = data.refreshToken
     this.mock = data.mock || null
@@ -77,6 +78,7 @@ module.exports = class SpotifyProvider {
 
   _setTrackUsingRequest (json) {
     this.track._json = json
+    this.track.isCurrentlyPlaying = json.is_playing
     if (json.is_playing === false) return
     this.track.title = json.item.name
     this.track.album = json.item.album.name

@@ -39,29 +39,44 @@ body
       color: $gray700
       letter-spacing: 0.125em
       text-transform: uppercase
+    div.button-container
+      display: flex
+      justify-content: space-between
     a.button
       display: flex
       justify-content: center
       align-items: center
       height: 9em
-      width: 21.5em
-      background: $spotifyGreen
+      width: 47.5%
       border-radius: 1em
-      box-shadow: 0 0.25em 0.25em rgba($spotifyGreen, 0.5), 0 1em 1em rgba($spotifyGreen, 0.1)
       will-change: transform
       transition: 100ms
       transform: translateY(0)
-      &:hover
-        background: #2BD968
-        transform: translateY(-0.25em)
-        box-shadow: 0 0.5em 0.5em rgba($spotifyGreenBrighter, 0.25), 0 1em 1em rgba($spotifyGreenBrighter, 0.1)
-      &:active
-        background: #2BD968
-        transform: translateY(0)
-        box-shadow: 0 0 0 rgba($spotifyGreen, 0.25), 0 0 0 rgba($spotifyGreen, 0.1)
+      &--spotify
+        background: $spotifyGreen
+        box-shadow: 0 0.25em 0.25em rgba($spotifyGreen, 0.5), 0 1em 1em rgba($spotifyGreen, 0.1)
+        &:hover
+          background: $spotifyGreenBrighter
+          transform: translateY(-0.25em)
+          box-shadow: 0 0.5em 0.5em rgba($spotifyGreenBrighter, 0.25), 0 1em 1em rgba($spotifyGreenBrighter, 0.1)
+        &:active
+          background: $spotifyGreenBrighter
+          transform: translateY(0)
+          box-shadow: 0 0 0 rgba($spotifyGreen, 0.25), 0 0 0 rgba($spotifyGreen, 0.1)
+      &--lastfm
+        background: $lastfmRed
+        box-shadow: 0 0.25em 0.25em rgba($lastfmRed, 0.5), 0 1em 1em rgba($lastfmRed, 0.1)
+        &:hover
+          background: $lastfmRedBrighter
+          transform: translateY(-0.25em)
+          box-shadow: 0 0.5em 0.5em rgba($lastfmRedBrighter, 0.25), 0 1em 1em rgba($lastfmRedBrighter, 0.1)
+        &:active
+          background: $lastfmRedBrighter
+          transform: translateY(0)
+          box-shadow: 0 0 0 rgba($lastfmRed, 0.25), 0 0 0 rgba($lastfmRed, 0.1)
       img
         display: block
-        height: 4em
+        width: 10em
     footer
       display: flex
       justify-content: space-between
@@ -85,3 +100,8 @@ body
     flex-direction: column
     section
       margin: 1em
+    div.button-container
+      flex-direction: column
+      a.button
+        margin: 1em 0
+        width: 100%
