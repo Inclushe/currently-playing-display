@@ -18,7 +18,6 @@ module.exports = class LastFMProvider {
         if (json.error) throw new Error(json.message)
         this._setTrackUsingRequest(json)
       })
-      .then(_ => this._setTrackAlbumArtUsingMusicbrainzID())
   }
 
   authenticate () {
@@ -44,29 +43,8 @@ module.exports = class LastFMProvider {
       this.track.album = json.album['#text']
       this.track.artists = json.artist['#text'] // Only gets the first artist
       this.track.id = json.mbid // may return an empty string
+      this.track.coverArtURL = json.image[json.image.length - 1]['#text']
       this.track.isLocal = false
     }
-  }
-
-  _setTrackAlbumArtUsingMusicbrainzID () {
-    // The last.fm API gives two mbids, one for the track and one for the album.
-    // The album is more likely to have album art
-    return this._fetchAlbumArtFromMusicbrainzAPI()
-      .then(data => data.json())
-      .then(json => {
-        this.track.coverArtURL = json.images[0].thumbnails.large
-      })
-      .catch(() => {
-        this.track.coverArtURL = null
-      })
-  }
-
-  _fetchAlbumArtFromMusicbrainzAPI () {
-    if (this.mock) {
-      return mockFetchReturningJSON(mockedMusicbrainzAPIRequest)
-    }
-    const mbid = this.track._json.album.mbid
-    const mbidAlbumArtAPI = `https://coverartarchive.org/release/${mbid}`
-    return window.fetch(mbidAlbumArtAPI)
   }
 }
