@@ -85,14 +85,12 @@
         - [X] authenticate
         - [X] getCurrentTrack
         - [X] getAlbumArt
-    - [ ] Fix track transitions in Firefox
+    - [X] Fix track transitions in Firefox
       - Painting takes a long time for some reason
-    - [ ] Make input box that takes username on homepage
-    - [ ] Add functionality to app
-      - [ ] Call Last.fm API
-      - [ ] Use MBID to get album art from coverartarchive.org
-      - [ ] Fill it in
-    - [ ] Get album covers from musicbrainz
+    - [ ] Add last.fm username input on homescreen
+      - [ ] Check if username is valid
+    - [ ] Add provider to settings
+  - [ ] Add reset button on settings screen that works
 
 ## Nice to haves
 
