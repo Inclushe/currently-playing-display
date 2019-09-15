@@ -35,6 +35,7 @@ export default {
         backgroundTypeIndex: 2,
         useTransitions: true,
         albumArtCurvedEdges: true,
+        pollingRate: 1000,
         albumTitle: {
           show: 'sometimes',
           hideIfSingle: true,
@@ -75,7 +76,6 @@ export default {
     getCurrentlyPlayingTrack () {
       const app = this
       if (app.mock === true) return this.handleGetCurrentlyPlayingTrackMock()
-
       app.provider.updateTrack()
         .then(() => {
           let json = app.provider.track
@@ -86,9 +86,12 @@ export default {
           } else {
             this.updateStatus(json)
           }
-          setTimeout(app.getCurrentlyPlayingTrack, 2000)
+          setTimeout(app.getCurrentlyPlayingTrack, app.settings.pollingRate)
         })
-        .catch(console.error)
+        .catch((e) => {
+          this.updateStatus({ error: e.message })
+          setTimeout(app.getCurrentlyPlayingTrack, app.settings.pollingRate)
+        })
     },
 
     handleGetCurrentlyPlayingTrackMock () {
@@ -209,7 +212,12 @@ export default {
     loadSettings () {
       const credentials = getCredentialsFromLocalStorage(['settings'])
       if (credentials && credentials.settings) {
-        this.settings = JSON.parse(credentials.settings)
+        const parsedSettingsFromStorage = JSON.parse(credentials.settings)
+        for (const setting in this.settings) {
+          if (parsedSettingsFromStorage[setting] !== undefined) {
+            this.settings[setting] = parsedSettingsFromStorage[setting]
+          }
+        }
       }
     },
 
@@ -263,8 +271,8 @@ export default {
           break
         case 'sometimes':
           const albumTypeIsSingle = this.getAlbumType() === 'single'
-          const isSelfTitled = new RegExp(`^${this.album}`).test(this.artists)
-          const titleSharesNameWithAlbum = new RegExp(`^${this.album}`).test(this.title)
+          const isSelfTitled = new RegExp(`^${this.album}`).test(this.artists) || this.album === this.artists
+          const titleSharesNameWithAlbum = new RegExp(`^${this.album}`).test(this.title) || this.album === this.title
           if ((albumTypeIsSingle && this.settings.albumTitle.hideIfSingle) ||
               (isSelfTitled && this.settings.albumTitle.hideIfSelfTitled) ||
               (titleSharesNameWithAlbum && this.settings.albumTitle.hideIfTitleHasSameNameAsAlbum)) {
