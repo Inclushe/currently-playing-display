@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "build": "parcel build client/src/index.pug client/src/app/index.pug --out-dir client/dist",
+    "build": "parcel build client/src/index.pug client/src/app/index.pug --out-dir client/dist && cp ./client/src/card.png client/dist/.",
     "serve": "npm run build && nodemon --delay 500 server/start.js",
     "test": "npm run test:client:build && npm run test:client && npm run test:server",
     "watch": "concurrently \"parcel watch client/src/index.pug client/src/app/index.pug --out-dir client/dist\" \"nodemon --delay 500 server/start.js\"",

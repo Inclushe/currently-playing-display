@@ -90,6 +90,7 @@
 - [X] Add provider switch in settings
 - [X] Make reset button work
 - [X] Send user to home page if /app/ is visited without auth
-- [ ] Make Twitter card
+- [X] Make Twitter card
+- [ ] Self-serve fonts
 - [ ] Create demo video
 - [ ] Set up with Heroku
