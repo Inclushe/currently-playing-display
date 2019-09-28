@@ -50,6 +50,16 @@ body
         width: 100%
         display: flex
         justify-content: space-between
+      #error
+        padding-bottom: 0.5em
+        font-family: $mainFont
+        font-weight: 500
+        font-size: 1.5em
+        line-height: 1.25
+        color: $gray900
+      #close
+        margin: -0.5em
+        cursor: pointer
       h4
         font-family: $mainFont
         font-size: 1.5em
@@ -58,6 +68,7 @@ body
         color: $gray900
         letter-spacing: 0.125em
         text-transform: uppercase
+        padding-bottom: 1em
       input
         font-family: $mainFont
         font-size: 1.5em
@@ -65,7 +76,6 @@ body
         line-height: 1.25
         color: $gray900
       input[type="text"]
-        width: 100%
         margin-right: 2em
         padding: 0.5em
         background: $gray100
@@ -85,6 +95,20 @@ body
         color: $gray100
         letter-spacing: 0.125em
         text-transform: uppercase
+        transition: 100ms
+        cursor: pointer
+        &:hover
+          background: $purple400
+          transform: translateY(-0.25em)
+          box-shadow: 0 0.5em 0.5em rgba($purple400, 0.25), 0 1em 1em rgba($purple400, 0.1)
+        &:active
+          background: $purple500
+          transform: translateY(0)
+          box-shadow: 0 0 0 rgba($purple500, 0.25), 0 0 0 rgba($purple500, 0.1)
+        &[disabled]
+          background: $gray400
+          box-shadow: none
+          cursor: not-allowed
     a.button
       display: flex
       justify-content: center
@@ -149,6 +173,10 @@ body
       a.button
         margin: 1em 0
         width: 100%
-    div.lastfm-username-container
-      .row, form
+    section.text div.lastfm-username-container
+      form
         flex-direction: column
+      input[type="text"]
+        width: 100%
+        margin-bottom: 0.5em
+        padding: 0.5em 0

@@ -11,15 +11,13 @@
       h2 Provider
       .settings__radio
         label(for="spotify" @click="reauthSpotify").settings__radio-button.settings__radio-button--provider
-          input(type="radio" name="provider" value="spotify" id="spotify" checked)
+          input(type="radio" name="provider" value="spotify" id="spotify" v-model="settings.type" v-bind:value="'spotify'")
           span.input-span Spotify
           img(src="../images/spotify-logo.svg")
-          span.note Tap to Reset
-        label(for="lastfm").settings__radio-button.settings__radio-button--provider.settings__radio-button--inactive
-          input(type="radio" name="provider" value="lastfm" id="lastfm" disabled="disabled")
+        label(for="lastfm" @click="reauthLastfm").settings__radio-button.settings__radio-button--provider
+          input(type="radio" name="provider" value="lastfm" id="lastfm" v-model="settings.type" v-bind:value="'lastfm'")
           span.input-span Last.fm
           img(src="../images/lastfm-logo.svg")
-          span.note Coming Soon?
     section.settings__setting
       h2 Background
       .settings__radio
@@ -69,4 +67,5 @@
         input(type="radio" name="albumTitle" v-model="settings.albumTitle.show" v-bind:value="'never'" id="never")
         span Always hide album title
     section.settings__setting
-      h2 Reset
+      h2
+        a(href="#" @click="resetApp") Reset App Data

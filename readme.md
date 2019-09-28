@@ -2,11 +2,6 @@
 
 ## TODO
 
-## Planned Support
-
-- [X] Spotify (using web API)
-- [ ] Last.fm (using musicbrainz for album covers as last.fm api ToS disallows image hotlinking)
-
 ## Issues
 
 - [X] Vue breaks when there is no album art (local files)
@@ -87,13 +82,14 @@
         - [X] getAlbumArt
     - [X] Fix track transitions in Firefox
       - Painting takes a long time for some reason
-    - [ ] Add last.fm username input on homescreen
-      - [ ] Check if username is valid
-    - [ ] Add provider to settings
-  - [ ] Add reset button on settings screen that works
+    - [X] Add last.fm username input on homescreen
+      - [X] Check if username is valid
 
-## Nice to haves
-
-- [ ] Parse Track Title dashes and parentheses as tags
-
-Remember to change all instances of "CHANGEME"
+- [X] Fix last.fm form design
+  - [X] Make responsive
+- [X] Add provider switch in settings
+- [X] Make reset button work
+- [X] Send user to home page if /app/ is visited without auth
+- [ ] Make Twitter card
+- [ ] Create demo video
+- [ ] Set up with Heroku

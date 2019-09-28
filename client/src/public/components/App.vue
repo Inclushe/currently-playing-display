@@ -41,7 +41,8 @@ export default {
           hideIfSingle: true,
           hideIfSelfTitled: true,
           hideIfTitleHasSameNameAsAlbum: true
-        }
+        },
+        type: null
       },
       getCurrentlyPlayingTrackInterval: null
     }
@@ -67,7 +68,10 @@ export default {
         APIKey: credentials.key,
         user: credentials.username
       })
+    } else if (credentials && credentials.auth_provider === null) {
+      this.redirectToHomePage()
     }
+    this.settings.type = credentials.auth_provider
     this.loadSettings()
     this.getCurrentlyPlayingTrack()
     this.timeout()
@@ -195,6 +199,23 @@ export default {
 
     reauthSpotify () {
       document.location = '/spotify/authorize'
+    },
+
+    reauthLastfm () {
+      document.location = '/?lastfmAuth=true'
+    },
+
+    resetApp () {
+      this.clearLocalStorage()
+      this.redirectToHomePage()
+    },
+
+    clearLocalStorage () {
+      localStorage.clear()
+    },
+
+    redirectToHomePage () {
+      document.location = '/'
     },
 
     timeout () {

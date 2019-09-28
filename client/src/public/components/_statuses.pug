@@ -11,7 +11,7 @@
 .status-view(v-else-if="state === 'error'")
   h1 Error
   p This can usually be resolved by re-authenticating.
-  p <a href="/spotify/authorize">Click here to re-authenticate.</a>
+  p <a href="/">Go back to the home page to re-authenticate.</a>
   pre {{ JSON.stringify(errorMessage, null, 2) }}
 .status-view(v-else)
   h1.loading Loading

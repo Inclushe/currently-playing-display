@@ -3,6 +3,7 @@ const lastfmUsernameElement = document.body.querySelector('#lastfmUsernameInput'
 const lastfmButtonElement = document.body.querySelector('#lastfmButton')
 const lastfmForm = document.body.querySelector('#usernameForm')
 const closeButtonElement = document.body.querySelector('#close')
+const errorMessageElement = document.body.querySelector('#error')
 let isShowingUsernameElement = false
 let isInErrorState = false
 
@@ -13,13 +14,23 @@ lastfmForm.addEventListener('submit', (e) => {
   e.preventDefault()
   const username = lastfmForm.username.value
   disableSubmitButton()
+  hideErrorMessage()
   checkIfUsernameIsValid(username)
     .then(isValid => {
       enableSubmitButton()
       if (isValid) {
         redirectToAppPageWithUsername(username)
+      } else {
+        showErrorMessage()
       }
     })
+})
+
+window.addEventListener('load', () => {
+  let queries = getQueriesFromURL()
+  if (queries && queries.lastfmAuth) {
+    showLastfmElement()
+  }
 })
 
 function checkIfUsernameIsValid (username) {
@@ -52,9 +63,29 @@ function hideLastfmElement () {
 
 function disableSubmitButton () {
   console.log(lastfmForm.sumbitButton)
-  lastfmForm.sumbitButton.disabled = 'disabled'
+  lastfmForm.sumbitButton.disabled = true
 }
 
 function enableSubmitButton () {
-  lastfmForm.sumbitButton.disabled = ''
+  lastfmForm.sumbitButton.disabled = false
+}
+
+function showErrorMessage () {
+  errorMessageElement.textContent = 'Username not found.'
+}
+
+function hideErrorMessage () {
+  errorMessageElement.textContent = ''
+}
+
+function getQueriesFromURL () {
+  return Array.from(window.location.search.split('&')).reduce((object, pair, index) => {
+    if (index === 0) {
+      pair = pair.slice(1, pair.length)
+    }
+    const key = pair.slice(0, pair.indexOf('='))
+    const value = pair.slice(pair.indexOf('=') + 1, pair.length)
+    object[key] = value
+    return object
+  }, {})
 }
