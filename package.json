@@ -36,7 +36,8 @@
     "give-me-a-gradient": "^0.3.0",
     "node-fetch": "^2.6.0",
     "nodemon": "^1.19.2",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "parcel": "^1.12.3"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.0.0",
@@ -53,7 +54,6 @@
     "jsdom": "^15.1.1",
     "jsdom-global": "^3.0.2",
     "mocha": "^6.2.0",
-    "parcel": "^1.12.3",
     "pug": "^2.0.4",
     "stylus": "^0.54.7",
     "supertest": "^4.0.2",
