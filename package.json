@@ -37,9 +37,7 @@
     "node-fetch": "^2.6.0",
     "nodemon": "^1.19.2",
     "serve-favicon": "^2.5.0",
-    "parcel": "^1.12.3"
-  },
-  "devDependencies": {
+    "parcel": "^1.12.3",
     "@vue/component-compiler-utils": "^3.0.0",
     "eslint": "^6.4.0",
     "eslint-config-standard": "^14.1.0",
