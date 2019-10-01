@@ -2,6 +2,9 @@
   "name": "currently-playing-display",
   "version": "0.0.1",
   "description": "currently-playing-display",
+  "engines": {
+    "node": "10.x"
+  },
   "repository": {
     "type": "git",
     "url": "git@gitlab.com:Inclushe/currently-playing-display.git"
