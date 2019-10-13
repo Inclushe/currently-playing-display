@@ -4,6 +4,7 @@
 
 <script>
 import renderGradient from 'give-me-a-gradient'
+import fscreen from 'fscreen'
 const SpotifyProvider = require('./SpotifyProvider')
 const LastFMProvider = require('./LastFMProvider')
 
@@ -247,6 +248,14 @@ export default {
         return this.spotify.current_track.item.album.album_type
       } else {
         return false
+      }
+    },
+
+    toggleFullscreen () {
+      if (fscreen.fullscreenElement !== null) {
+        fscreen.exitFullscreen(this.$el)
+      } else {
+        fscreen.requestFullscreen(this.$el)
       }
     }
   },

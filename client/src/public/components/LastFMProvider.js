@@ -54,18 +54,20 @@ module.exports = class LastFMProvider {
   }
 
   _reformatCoverArtURL (url) {
-    let regex = /https:\/\/lastfm\.freetls\.fastly\.net\/\i\/u\/300x300\/([a-zA-Z0-9]+)/
+    let regex = /https:\/\/(.*)\/\i\/u\/300x300\/([a-zA-Z0-9]+)/
     console.log(url)
     if (regex.test(url) === false) {
       this.track.coverArtURL = url
+      return
     }
-    let coverArtHash = url.match(regex)[1]
+    let coverArtBaseURL = url.match(regex)[1]
+    let coverArtHash = url.match(regex)[2]
     console.log(coverArtHash)
     if (coverArtHash === placeholderCoverArtHash) {
       this.track.isLocal = true
     } else {
-      console.log(`https://lastfm.freetls.fastly.net/i/u/800x800/${coverArtHash}.png`)
-      this.track.coverArtURL = `https://lastfm.freetls.fastly.net/i/u/800x800/${coverArtHash}.png`
+      console.log(`https://${coverArtBaseURL}/i/u/800x800/${coverArtHash}.png`)
+      this.track.coverArtURL = `https://${coverArtBaseURL}/i/u/800x800/${coverArtHash}.jpg`
     }
   }
 }
