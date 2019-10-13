@@ -146,7 +146,7 @@ export default {
     },
 
     trackChanged (data) {
-      return (data.id !== this.lastTrackID)
+      return (data.id !== this.lastTrackID) || (data.isCurrentlyPlaying === true)
     },
 
     populateDataWithTrackInfo (data) {

@@ -1,6 +1,7 @@
 const mockedLastFMAPIRequest = require('../../../tests/mocks').lastFmExampleCurrentlyPlayingResponse
 const mockFetchReturningJSON = require('./mockFetchReturningJSON')
 const Track = require('./Track')
+const placeholderCoverArtHash = '2a96cbd8b46e442fc41c2b86b821562f'
 
 module.exports = class LastFMProvider {
   constructor (data = {}) {
@@ -43,11 +44,28 @@ module.exports = class LastFMProvider {
       this.track.album = json.album['#text']
       this.track.artists = json.artist['#text'] // Only gets the first artist
       this.track.id = json.url // url is more reliable than mbid
-      this.track.coverArtURL = json.image[json.image.length - 1]['#text']
       this.track.isLocal = false
+      this._reformatCoverArtURL(json.image[json.image.length - 1]['#text'])
+      // this.track.coverArtURL = json.image[json.image.length - 1]['#text']
       this.track.isCurrentlyPlaying = true
     } else {
       this.track.isCurrentlyPlaying = false
+    }
+  }
+
+  _reformatCoverArtURL (url) {
+    let regex = /https:\/\/lastfm\.freetls\.fastly\.net\/\i\/u\/300x300\/([a-zA-Z0-9]+)/
+    console.log(url)
+    if (regex.test(url) === false) {
+      this.track.coverArtURL = url
+    }
+    let coverArtHash = url.match(regex)[1]
+    console.log(coverArtHash)
+    if (coverArtHash === placeholderCoverArtHash) {
+      this.track.isLocal = true
+    } else {
+      console.log(`https://lastfm.freetls.fastly.net/i/u/800x800/${coverArtHash}.png`)
+      this.track.coverArtURL = `https://lastfm.freetls.fastly.net/i/u/800x800/${coverArtHash}.png`
     }
   }
 }
