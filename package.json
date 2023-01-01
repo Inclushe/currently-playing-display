@@ -51,7 +51,7 @@
     "mocha": "^6.2.0",
     "node-fetch": "^2.6.0",
     "nodemon": "^1.19.2",
-    "parcel": "^1.12.3",
+    "parcel": "^2.8.2",
     "pug": "^2.0.4",
     "serve-favicon": "^2.5.0",
     "stylus": "^0.54.7",
