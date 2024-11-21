@@ -6,6 +6,7 @@ Watch the app demo here: [https://www.youtube.com/watch?v=Sniz7l2zR9E](https://w
 
 ## Installation
 
+- Run `npm install`
 - Copy `.env.sample` to `.env`
 - Create a Spotify app at [developer.spotify.com](https://developer.spotify.com/documentation/web-api/concepts/apps)
 - Under Redirect URIs, add `http://localhost:8080/spotify/callback`
